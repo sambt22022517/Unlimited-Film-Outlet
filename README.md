@@ -16,8 +16,11 @@ git clone https://github.com/sambt22022517/Unlimited-Film-Outlet.git
 4. Chuyển hướng đến thự mục `Unlimited-Film-Outlet`.
 5. - Đối với thành viên nhóm, tải file `.env` đã được gửi trong nhóm chat về máy và để vào thư mục hiện tại.
    - Đối với người khác, có thể xem file `.envexample` để biết về cấu trúc của một file `.env`, từ đó tự tạo ra file riêng.
-6. Chạy lệnh `docker compose build`.
-7. Để xem thử project, chạy lệnh `docker compose up` và truy cập vào link [localhost:8000](http://localhost:8000/).
+6. Chạy lệnh sau:
+```bash
+docker compose build
+```
+8. Để xem thử project, chạy lệnh `docker compose up` và truy cập vào link [localhost:8000](http://localhost:8000/).
 ![result-web](result/web-basic.png)
 
 ### Một số hướng dẫn cho thành viên trong quá trình thực hiện project
