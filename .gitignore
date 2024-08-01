@@ -2,3 +2,8 @@
 .vscode/
 db.sqlite3
 **__pycache__/
+
+.DS_Store
+
+# virtual environment
+.film
