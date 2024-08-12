@@ -1,0 +1,45 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Movie List</title>
+    </head>
+    <body>
+        <h1>Các bộ phim của jack nè!!!</h1>
+        {% if movies %}
+            <ul>
+                {% for movie in movies %}
+                <li>
+                    <a href="{% url 'ViewDetail' movie_id=movie.id %}">View Details</a>
+                    <p>Name: {{movie.name}}</p><br>
+                    <p>Genres:
+                        {% for genre in movie.genre.all %}
+                            {{genre.name}}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p><br>
+
+                    <p>Authors:
+                        {% for author in movie.author.all %}
+                            {{author.name}}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p><br>
+                    
+                    <p>Actors:
+                        {% for actor in movie.actor.all %}
+                            {{actor.name}}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p><br>
+
+                    <p>story: {{movie.story}}</p><br>
+                    <p>rating: {{movie.rating}}/10</p>
+                    <p>release_date: {{movie.release_date}}</p>
+
+                    <img src="{{movie.cover}}" alt="text" width="width_value" height="height_value"><br>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h1>Jack chưa ra phim mới</h1>
+        {% endif %}
+    </body>
+</html>
