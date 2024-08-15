@@ -1,0 +1,28 @@
+<!-- home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome to the Film Library</h1>
+
+    <!-- Thanh tìm kiếm -->
+    <form method="get" action="{% url 'search' %}">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search for films...">
+
+        <label for="genre">Genre:</label>
+        <input type="text" id="genre" name="genre" value="{{ genre }}" placeholder="Filter by genre">
+
+        <label for="min_price">Min Price:</label>
+        <input type="number" id="min_price" name="min_price" value="{{ min_price }}" step="0.01" placeholder="Min price">
+
+        <label for="max_price">Max Price:</label>
+        <input type="number" id="max_price" name="max_price" value="{{ max_price }}" step="0.01" placeholder="Max price">
+        <button type="submit">Search</button>
+    </form>
+    <a href="{% url 'logout' %}"> Đăng xuất</a>
+</body>
+</html>

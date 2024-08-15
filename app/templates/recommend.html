@@ -1,0 +1,50 @@
+<!-- search.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Recommend Results</h1>
+
+    <!-- Thanh tìm kiếm -->
+    <form method="get" action="{% url 'search' %}">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search for films...">
+
+        <label for="genre">Genre:</label>
+        <input type="text" id="genre" name="genre" value="{{ genre }}" placeholder="Filter by genre">
+
+        <label for="min_price">Min Price:</label>
+        <input type="number" id="min_price" name="min_price" value="{{ min_price }}" step="0.01" placeholder="Min price">
+
+        <label for="max_price">Max Price:</label>
+        <input type="number" id="max_price" name="max_price" value="{{ max_price }}" step="0.01" placeholder="Max price">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Hiển thị kết quả tìm kiếm -->
+    <h2>Results:</h2>
+    <ul>
+        {% for film in films %}
+            <li>
+                <a href="{% url 'film_detail' film.id %}">{{ film.film_name }}</a>
+                <p>Release Date: {{ film.release_date }}</p>
+                <p>Director: {{ film.author }}</p>
+                <p>Genre: {{ film.genre }}</p>
+                <p>Description: {{ film.story }}</p>
+                <p>Rating: {{ film.rating }}</p>
+                {% if film.cover %}
+                    <img src="{{ film.cover.url }}" alt="Cover image" style="width:100px;height:auto;">
+                {% endif %}
+                <p>Price: {{ film.price }}</p>
+            </li>
+        {% empty %}
+            <li>No films found.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'home' %}">Trang chủ</a>
+    <a href="{% url 'logout' %}"> Đăng xuất</a>
+</body>
+</html>
