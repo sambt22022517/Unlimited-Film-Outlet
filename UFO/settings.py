@@ -89,6 +89,9 @@ DATABASES = {
         'PASSWORD': env("DATABASE_PASSWORD"),
         'HOST': env("DATABASE_HOST"),
         'PORT': env("DATABASE_PORT"),
+        'TEST': {
+            'NAME': 'test_UFO',  # Sử dụng cơ sở dữ liệu test cố định
+        },
     }
 }
 

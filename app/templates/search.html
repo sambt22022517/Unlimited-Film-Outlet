@@ -11,7 +11,7 @@
 
     <!-- Thanh tìm kiếm -->
     <form method="get" action="{% url 'search' %}">
-        <input type="text" name="q" value="{{ query }}" placeholder="Search for films...">
+        <input type="text" name="film_name" value="{{ film_name }}" placeholder="Search for films...">
 
         <label for="genre">Genre:</label>
         <input type="text" id="genre" name="genre" value="{{ genre }}" placeholder="Filter by genre">
