@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!--checkbox ,Tên phim, đơn giá, Xóa, Xem chi tiết -->
+    {% if films %}
+    <ul>
+        {% for film in films %}
+            <li>
+                Tên phim: {{film.film_name}}, giá: {{film.price}}
+            </li>
+        {% endfor %}
+    <ul>
+        <h2>Tổng tiền: {{total_price}}</h2>
+        <!-- <a href="#">Thanh toán</a> -->
+        <form method="post" action="{% url 'Payment' %}">
+            {% csrf_token %}
+            <button type="submit">Thanh toán</button>
+        </form>
+    {% else %}
+        <p>Không có phim nào được chọn</p>
+    {% endif %}
+{% endblock %}
+
+{% block notification %}
+    {% if notification %}
+    notification
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Các bộ phim của jack nè!!!</h1>
+    {% if films %}
+        <ul>
+            {% for film in films %}
+            <li>
+                <a href="{% url 'Viewdetailfilm' id_film=film.id %}">Xem chi tiết</a>
+                <ul>
+                    <li>Name: {{film.name}}</li>
+                    <li>Genres: {{film.genre}}</li>
+                    <li>Genres: {{film.author}}</li>
+                    <li>Actors: {{film.actor}}</li>
+                    <li>story: {{film.story}}</li>
+                    <li>rating: {{film.rating}}/10</li>
+                    <li>release_date: {{film.release_date}}</li>
+                    <li>price: {{film.price}}</li>
+                </ul>
+                <img src="{{film.cover}}" alt="text" width="width_value" height="height_value"><br>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h1>Jack chưa ra phim mới</h1>
+    {% endif %}
+{% endblock %}
