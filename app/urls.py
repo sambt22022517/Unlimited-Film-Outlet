@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf.urls.static import static
+from django.conf import settings
 from . import views
 
 urlpatterns = [
@@ -14,3 +16,4 @@ urlpatterns = [
     path('recommend/', views.recommend, name='recommend'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
