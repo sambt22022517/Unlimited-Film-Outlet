@@ -1,8 +1,7 @@
 version: '3'
 services:
   db:
-    build:
-      dockerfile: DbDockerfile
+    image: mariadb:latest
     container_name: database
     restart: always
     environment:

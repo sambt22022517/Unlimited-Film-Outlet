@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if bills %}
+    <ul>
+        {% for bill in bills %}
+            <form method="post" action="{% url 'Viewbill' %}">
+                {% csrf_token %}
+                <li>
+                    <input type="hidden" name="id_bill" value="{{ bill.id }}">
+                    Đơn hàng {{forloop.counter}} ---- {{bill.payment_date}} ---- 
+                    {% if bill.status == 'C' %}
+                    Đã hủy
+                    {% elif bill.status == 'P' %}
+                    Đã hoàn thành
+                    {% elif bill.status == 'N' %}
+                    Chờ thanh toán
+                    {% else %}
+                    Lỗi
+                    {% endif %}
+                    <button type="submit">Xem</button>
+                </li>
+            </form>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>Chưa có bill nào</p>
+    {% endif %}
+{% endblock %}
+
+{% block notification %}
+    {% if notification %}
+    notification
+    {% endif %}
+{% endblock %}

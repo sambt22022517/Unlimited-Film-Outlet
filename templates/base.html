@@ -1,0 +1,21 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}My Site{% endblock %}</title>
+</head>
+<body>
+    {% include "nav.html" %}
+    
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+    <div id="notification">
+        {% block notification %}
+        {% if notification %}
+            {{notification}}
+        {% endif %}
+        {% endblock %}
+    </div>
+</body>
+</html>

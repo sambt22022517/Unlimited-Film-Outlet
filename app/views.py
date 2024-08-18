@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import User, Film, Habit
+from .models import User, Film, Habit, Cart, BillItem, Bill
 from .ml_model import RecommendModel
 from django.contrib.auth.hashers import make_password, check_password
 from django.db.models import Case, When
 from django import forms
 import numpy as np
 import random
+from .cart import *
+from .order import *
 
 recommend_model = RecommendModel()
 genres = {
@@ -79,7 +81,7 @@ def search(request):
         films = films.filter(price__lte=max_price)
 
     context = {
-        'films': films,
+        'films': films[:20],
         'film_name': film_name,
         'genre': genre,
         'min_price': min_price,
@@ -197,20 +199,20 @@ def recommend(request):
     if not user_habit.exists():
         # Chọn ngẫu nhiên một số phim để gợi ý
         films = Film.objects.all()
-        random_films = random.sample(list(films), min(5, films.count()))  # Giới hạn số lượng phim ngẫu nhiên
+        random_films = random.sample(list(films), min(20, films.count()))  # Giới hạn số lượng phim ngẫu nhiên
         context = {
             'films': random_films,
         }
     else:
-        film_name_list = []
+        film_id_list = []
         genre_count_vector = np.zeros(len(genres))
         for habit in user_habit:
-            film_name_list.append(habit.film.film_name)
-            genre_list = habit.film.genre.split(',')
+            film_id_list.append(habit.film.id)
+            genre_list = habit.film.genre
             for genre in genre_list:
                 genre_count_vector[genres[genre]] += 1
 
-        list_film_id = recommend_model.predict(film_name_list, genre_count_vector)
+        list_film_id = recommend_model.predict(film_id_list, genre_count_vector)
         order_case = Case(*[When(id=id_film, then=index) for index, id_film in enumerate(list_film_id)])
         films = Film.objects.filter(id__in=list_film_id).order_by(order_case)
 
@@ -252,3 +254,152 @@ def edit_profile(request):
         'email': user.email,
     }
     return render(request, 'edit_profile.html', context=context)
+
+#login_require
+def render_add_cart(request):
+    if request.method == 'POST':
+        try:
+            user_id = request.session['user_id']
+            user = User.objects.get(id = user_id)
+            id_film = request.POST['id_film']
+            film = Film.objects.get(id = id_film)
+
+            status, notification = add_cart(film, user)
+            next_url = request.POST.get('next')
+
+            return redirect(next_url)
+        except:
+            return redirect('home')
+    return redirect('Viewallfilm')
+
+#login_require
+def render_update_cart(request):
+    if 'user_id' not in request.session:
+        return redirect('login')
+    
+    if request.method == 'POST':
+        id_cart = request.POST['id_cart']
+        action = request.POST['action']
+        if not id_cart or not action:
+            return redirect('Viewcart')
+
+        cart = Cart.objects.get(id = id_cart)
+        status, notification = update_cart(cart, action)
+
+        return redirect('Viewcart')
+    
+    return redirect('Viewcart')
+
+#login_require
+def render_get_cart(request):
+    if 'user_id' not in request.session:
+        return redirect('login')
+        
+    # Lấy id người dùng từ session
+    user_id = request.session['user_id']
+    
+    # Lấy người dùng từ cơ sở dữ liệu
+    user = User.objects.get(id=user_id)
+    
+    # Lấy giỏ hàng của người dùng
+    carts = Cart.objects.filter(user=user)
+    
+    # Render trang giỏ hàng với dữ liệu
+    return render(request, 'viewcart.html', {'carts': carts})
+
+def render_bill_for_payment(request):
+    # render ra bill để người dùng xem và thanh toán
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')  # Nếu không có user_id trong session, yêu cầu đăng nhập
+    
+    user = User.objects.get(id=user_id)
+    carts = Cart.objects.filter(user=user, selected=True)
+
+    if not carts.exists():
+        return redirect('Viewcart')  # Nếu giỏ hàng trống, chuyển hướng đến trang giỏ hàng
+    
+    bill = Bill(user=user)
+    bill.save()
+
+    total_price = Decimal(0)
+    films = []
+
+    for cart in carts:
+        film = cart.film
+        price = film.price
+        total_price += price
+        films.append(film)
+
+        billitem = BillItem(bill=bill, film=film)
+        billitem.save()
+    
+    bill.total_price = total_price
+    bill.save()
+
+    return render(request, 'viewbillforpayment.html', {'films': films, 'total_price': total_price, 'bill': bill})
+
+def render_pay_success(request):
+    create_bill(request, COMPLETE)
+    return render(request, 'success.html')
+
+def render_pay_fail(request):
+    create_bill(request, CANCELLED)
+    return render(request, 'fail.html')
+
+def render_pay_error(request):
+    create_bill(request, ERROR)
+    return render(request, 'error.html')
+
+def render_payment(request):
+    if request.method == "POST":
+        try:
+            user_id = request.session.get('user_id')
+            if not user_id:
+                return redirect('login')  # Nếu không có user_id trong session, yêu cầu đăng nhập
+            bill_id = request.POST.get('bill_id')
+
+            user = User.objects.get(id=user_id)
+            bill = Bill.objects.get(id=bill_id, user=user)
+            carts = Cart.objects.filter(user=user, selected=True)
+
+            if 'payment' in request.POST:
+                bill.status = COMPLETE
+                bill.save()
+                carts.delete()
+                return render(request, 'success.html')
+            elif 'cancel' in request.POST:
+                bill.status = CANCELLED
+                bill.save()
+                carts.delete()
+                return render(request, 'cancel.html')
+
+        except Exception as e:
+            print(f"Error: {e}")
+            return render(request, 'fail.html')  # Thêm trang lỗi chung
+
+    return redirect('Viewbillforpayment')
+
+def render_bill(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')  # Nếu không có user_id trong session, yêu cầu đăng nhập
+    if request.method == 'POST':
+        id_bill = request.POST['id_bill']
+        bill = Bill.objects.get(id = id_bill)
+
+        bill_items = BillItem.objects.filter(bill = bill)
+        return render(request, 'viewbill.html', {'bill': bill, 'bill_items': bill_items})
+
+    return redirect("Viewallbill")
+
+def render_all_bill(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')  # Nếu không có user_id trong session, yêu cầu đăng nhập
+    
+    # lấy bill
+    user = User.objects.get(id = user_id)
+    bills = Bill.objects.filter(user = user)
+
+    return render(request, 'viewallbill.html', {'bills': bills})

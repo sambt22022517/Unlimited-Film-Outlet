@@ -21,6 +21,12 @@
     {% if user.is_authenticated %}
         <p>Your clicks: {{ num_click }}</p>
     {% endif %}
+    <form method="post" action="{% url 'Addcart' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.path }}">
+        <input type="hidden" name="id_film" value="{{ film.id }}">
+        <button type="submit">Thêm vào giỏ hàng</button>
+    </form>
 
     <a href="{% url 'home' %}">Trang chủ</a>
     <a href="{% url 'logout' %}"> Đăng xuất</a>
