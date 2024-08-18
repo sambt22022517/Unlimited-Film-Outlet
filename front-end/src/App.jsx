@@ -3,21 +3,26 @@ import {
   RouterProvider, 
   Outlet,
 } from 'react-router-dom';
-import Header from './components/Header';
+// import Header from './components/Header';
+import NewHeader from './components/NewHeader';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import './styles/App.css';
-import MovieDetails from './pages/MovieDetails';
 import NotFound from './pages/NotFound';
+import MovieDetails from './pages/MovieDetails';
 import Login from './pages/LoginPage';
 import Register from './pages/RegisterPage';
+import UserProfile from './pages/UserProfile';
+import CartPage from './pages/CartPage';
+import PurchaseHistoryPage from './pages/PurchaseHistoryPage';
+import SearchPage from './pages/SearchPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: (
       <>
-        <Header />
+        <NewHeader />
         <main>
           <Outlet /> {/* Chỗ để các thành phần con render */}
         </main>
@@ -34,6 +39,22 @@ const router = createBrowserRouter([
         path: 'movie/:id',
         element: <MovieDetails /> // Chi tiết phim
       },
+      {
+        path: 'account',
+        element: <UserProfile /> // Trang tài khoản
+      },
+      {
+        path: 'cart',
+        element: <CartPage /> // Trang giỏ hàng
+      },
+      {
+        path: 'purchase-history',
+        element: <PurchaseHistoryPage /> // Trang lịch sử mua hàng
+      },
+      {
+        path: 'search',
+        element: <SearchPage /> // Trang tìm kiếm
+      }
     ]
   },
   {

@@ -231,37 +231,6 @@ img {
   border-style:none
 }
 
-button, input, optgroup, select, textarea {
-  font-family: inherit;
-  font-size: 100%;
-  line-height: 1.15;
-  margin:0
-}
-
-button, input {
-  overflow:visible
-}
-
-button, select {
-  text-transform:none
-}
-
-body, button, input, select, textarea {
-  font-synthesis: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing:grayscale
-}
-
-body, button, input, select, textarea {
-  -moz-font-feature-settings: 'kern';
-  font-feature-settings: 'kern';
-}
-
-[type=button], [type=reset], [type=submit], button {
-  -webkit-appearance:button;
-  appearance: button;
-}
-
 .shelf-grid-nav__arrow {
   width: 40px;
   height: 100%;

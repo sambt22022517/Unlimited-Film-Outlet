@@ -21,13 +21,13 @@ label {
   margin-bottom: 5px;
 }
 
-input {
+#username input {
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
 }
 
-button {
+/* button {
   width: 100%;
   padding: 10px;
   background-color: #007bff;
@@ -36,7 +36,7 @@ button {
   border-radius: 5px;
   cursor: pointer;
   margin-top: 10px;
-}
+} */
 
 button:hover {
   background-color: #0056b3;
