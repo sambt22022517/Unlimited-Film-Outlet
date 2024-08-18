@@ -1,16 +1,14 @@
 <!-- navbar.html -->
 <nav>
     <ul>
-        <li><a href="{% url 'Home' %}">Home</a></li>
-        {% if 'id_user' not in request.session %}
-            <li><a href="{% url 'Login' %}">Đăng nhập</a></li>
-            <li><a href="{% url 'Register' %}">Đăng kí</a></li>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        {% if 'user_id' not in request.session %}
+            <li><a href="{% url 'login' %}">Đăng nhập</a></li>
+            <li><a href="{% url 'register' %}">Đăng kí</a></li>
         {% else %}
             <li>Xin chào {{user.user_name}}</li>
-            <li><a href="{% url 'Logout' %}">Đăng xuất</a></li>
+            <li><a href="{% url 'logout' %}">Đăng xuất</a></li>
             <li><a href="{% url 'Viewcart' %}">Giỏ hàng</a></li>
-            <li><a href="{% url 'Viewallfilm' %}">Sản phẩm</a></li>
-            <li><a href="{% url 'Viewallbill' %}">Hóa đơn</a></li>
         {% endif %}
     </ul>
 </nav>

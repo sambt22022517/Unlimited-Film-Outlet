@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if bill_items and bill %}
+    <ul>
+        <li>Ngày thanh toán: {{bill.payment_date}}</li>
+        <li>
+            các phim đã mua:
+            <ul>
+                {% for item in bill_items %}
+                <li>
+                    Tên phim: {{item.film.film_name}}
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li>
+            Trạng thái: 
+            {% if bill.status == 'C' %}
+            <h3>Đã hủy</h3>
+            {% elif bill.status == 'P' %}
+            <h3>Đã hoàn thành</h3>
+            {% elif bill.status == 'N' %}
+            <h3>Chờ thanh toán</h3>
+            <form method="post" action="{% url 'Payment' %}">
+                {% csrf_token %}
+                <input type="hidden" name="bill_id" value="{{ bill.id }}">
+                <button type="submit" name="payment">Thanh toán</button>
+                <button type="submit" name="cancel">Huỷ đơn</button>
+            </form>
+            {% else %}
+            <h3>Lỗi</h3>
+            {% endif %}
+        </li>
+        <li>Tổng tiền: {{bill.total_price}}</li>
+    </ul>
+    {% else %}
+        <p>Không có bill này</p>
+    {% endif %}
+{% endblock %}
+
+{% block notification %}
+    {% if notification %}
+    notification
+    {% endif %}
+{% endblock %}
