@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!--checkbox ,Tên phim, đơn giá, Xóa, Xem chi tiết -->
+    {% if carts %}
+        {% for cart in carts %}
+            <!-- checkbox, mỗi lần người dùng nhấn vào checkbox, trạng thái selected của phim sẽ được thay đổi -->
+            <form method="post" action="{% url 'Updatecart' %}">
+                {% csrf_token %}
+                <!-- lấy id của cart -->
+                <input type="hidden" name="id_cart" value="{{cart.id}}">
+                <!-- Tạo checkbox như 1 button submit -->
+                <input type="checkbox" {% if cart.selected %} checked {% endif %}>
+                <button type="submit" name="action" value="TRANSFORM SELECTED">
+                    {% if cart.selected %}
+                    Bỏ chọn
+                    {% else %}
+                    Chọn
+                    {% endif %}
+                </button>
+                <!-- Khi nhấn submit, lệnh action = TRANSFORM SELECTED sẽ được gủi -->
+                Tên phim: {{cart.film.film_name}},
+                Đơn giá: {{cart.film.price}},
+                <button type="submit" name="action" value="DELETE">Xóa</button>
+            </form>
+        {% endfor %}
+        <a href="{% url 'Viewbillforpayment' %}">Mua phim</a>
+    {% else %}
+        <p>Giỏ hàng trống</p>
+    {% endif %}
+{% endblock %}
+
+{% block notification %}
+    {% if notification %}
+    notification
+    {% endif %}
+{% endblock %}

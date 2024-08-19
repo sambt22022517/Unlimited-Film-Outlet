@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome to Profile Page</h1>
+
+    <p>Hello, {{ user_name }}! You are logged in.</p>
+    <p>Your id is {{ id }}!</p>
+    <p>Your email is {{ email }}!</p>
+    <a href="{% url 'home' %}">Trang chủ</a>
+    <a href="{% url 'edit_profile' %}">Edit Profile</a>
+</body>
+</html>

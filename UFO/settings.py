@@ -19,6 +19,20 @@ env = environ.Env(
 )
 environ.Env.read_env('.env')
 
+# Thanh toán paypal
+# import paypalrestsdk
+
+# PAYPAL_CLIENT_ID = 'AbTH6F7aDIQFY09Fq6NIcvzEMbMxR_abPFjGK0Rfx8lI91VRjotVFTdYG3tIXlGblSTAflXmcw5vr2gk'
+# PAYPAL_CLIENT_SECRET = 'EKWs7bSnEGBQMeIBH8AmPtBgdbdB3jWa5lxU-IlFPJS1CAKfsKm_DX1Tt8fWtv953YpYQnNIsCh-qzjn'
+# PAYPAL_MODE = 'sandbox'  # sandbox hoặc live
+
+# paypalrestsdk.configure({
+#   "mode": PAYPAL_MODE,  # sandbox hoặc live
+#   "client_id": PAYPAL_CLIENT_ID,
+#   "client_secret": PAYPAL_CLIENT_SECRET
+# })
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -44,6 +58,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'cart',
+    # 'film',
+    # 'home',
+    # 'user',
+    # 'order',
+    'app',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +81,7 @@ ROOT_URLCONF = 'UFO.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,7 +108,7 @@ DATABASES = {
         'PASSWORD': env("DATABASE_PASSWORD"),
         'HOST': env("DATABASE_HOST"),
         'PORT': env("DATABASE_PORT"),
-    }
+    },
 }
 
 
@@ -130,6 +150,11 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+# Thư mục lưu trữ các file tải lên
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# URL để truy cập các file này
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
