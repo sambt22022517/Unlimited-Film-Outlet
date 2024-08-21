@@ -33,3 +33,23 @@ docker build -t movie-app:v1.0 .
 # Step 3
 docker run -p 3000:3000 movie-app:v1.0
 ```
+
+## Hướng dẫn chạy toàn bộ project (mức test)
+```bash
+# Step 1: Start server
+# Step 1.1
+docker compose build
+# Step 1.2
+docker compose up
+
+# Step 2: Start Web app
+cd front-end
+
+# Step 2.1
+docker build -t movie-app:v1.0 .
+
+# Step 2.2
+docker run -p 3000:3000 movie-app:v1.0
+
+# Step 2.3: Open localhost:3000/
+```
