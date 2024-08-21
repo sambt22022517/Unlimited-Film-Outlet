@@ -66,20 +66,6 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 } */
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-
-
 /* ######################################################################## */
 .divider {
   margin: 20px 0;
@@ -98,6 +84,7 @@ button, input, optgroup, select, textarea {
   margin:0
 }
 
+/* 1250 */
 button, input {
   overflow:visible
 }
@@ -106,20 +93,10 @@ button, select {
   text-transform:none
 }
 
-body, button, input, select, textarea {
-  font-synthesis: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing:grayscale
-}
-
-body, button, input, select, textarea {
-  -moz-font-feature-settings: 'kern';
-  font-feature-settings: 'kern';
-}
-
+/* 1258 */
 [type=button], [type=reset], [type=submit], button {
-  -webkit-appearance:button;
   appearance: button;
+  -webkit-appearance:button;
 }
 
 /* 1324 */
@@ -127,6 +104,19 @@ body, button, input, select, textarea {
   margin: 0;
   padding: 0;
   box-sizing: border-box
+}
+
+/* 1314 */
+body, button, input, select, textarea {
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing:grayscale
+}
+
+/* 1444 */
+body, button, input, select, textarea {
+  -moz-font-feature-settings: 'kern';
+  font-feature-settings: 'kern';
 }
 
 a, blockquote, body, code, dd, div, dl, dt, embed, fieldset, footer, form, h1, h2, h3, h4, h5, h6, header, html, img, legend, li, ol, p, pre, section, table, td, th, ul {
@@ -763,3 +753,4 @@ a, blockquote, body, code, dd, div, dl, dt, embed, fieldset, footer, form, h1, h
       --keyColorBackground:#409cff
   }
 }
+

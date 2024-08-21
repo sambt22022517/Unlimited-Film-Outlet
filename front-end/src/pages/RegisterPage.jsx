@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import '../styles/Register.css';
+import { SHA256 } from "crypto-js";
+import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -10,7 +13,9 @@ function Register() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const { login } = useContext(AuthContext);
+
+  const handleRegister = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert("Mật khẩu không khớp!");
@@ -20,10 +25,30 @@ function Register() {
       alert("Bạn phải đồng ý với các điều khoản!");
       return;
     }
-    // Add your registration logic here
-    console.log('Registering with', { email, username, password });
-    // Redirect to login page after successful registration (optional)
-    navigate('/');
+
+    const hashPassword = SHA256(password).toString();
+
+    try {
+      const response = await axios.post('http://localhost:8000/register', {
+        "email": email,
+        "username": username,
+        "password": hashPassword,
+      });
+
+      if (response.status === 200) {
+        const { sessionToken } = response.data;
+        login(sessionToken);
+        alert("Đăng ký thành công!");
+        console.log('Registering with', { email, username, password });
+        navigate('/');
+      } else if (response.status === 201) {
+        alert("Tên đăng nhập hoặc email đã tồn tại!");
+      } else {
+        alert("Đăng ký thất bại!");
+      }
+    } catch (err) {
+      console.error('Error:', err);
+    }
   };
 
   const handleCancel = () => {
@@ -87,7 +112,7 @@ function Register() {
           />
           <label htmlFor="terms"> Tôi đồng ý với các điều khoản và điều kiện</label>
         </div>
-        <button type="submit">Đăng Ký</button>
+        <button type="submit" className="register-submit-button">Đăng Ký</button>
         <button type="button" onClick={handleCancel} className="cancel-button">
           Huỷ
         </button>

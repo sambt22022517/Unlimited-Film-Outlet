@@ -16,6 +16,7 @@ import UserProfile from './pages/UserProfile';
 import CartPage from './pages/CartPage';
 import PurchaseHistoryPage from './pages/PurchaseHistoryPage';
 import SearchPage from './pages/SearchPage';
+import AuthProvider from './context/AuthContext';
 
 const router = createBrowserRouter([
   {
@@ -36,7 +37,7 @@ const router = createBrowserRouter([
         element: <Home /> // Trang chính
       },
       {
-        path: 'movie/:id',
+        path: 'film/:id',
         element: <MovieDetails /> // Chi tiết phim
       },
       {
@@ -69,7 +70,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   );
 }
 

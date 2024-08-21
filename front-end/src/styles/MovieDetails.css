@@ -43,9 +43,9 @@
   z-index:1
 }
 
-.product-header__image-bg--hidden {
+/* .product-header__image-bg--hidden {
   opacity:0
-}
+} */
 
 /* ################################################################ */
 .product-header__main__container {
@@ -165,11 +165,6 @@
 }
 
 /* ################################################################ */
-[type=button], [type=reset], [type=submit], button {
-  appearance: button;
-  -webkit-appearance: button;
-}
-
 .typography-title-3-emphasized {
   font-size: 15px;
   line-height: 1.33338;

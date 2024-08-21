@@ -149,10 +149,10 @@
   padding-right:10px
 }
 
-li {
+/* li {
   display: list-item;
   text-align: match-parent;
-}
+} */
 
 
 
@@ -200,11 +200,6 @@ li {
   position:relative
 }
 
-.shelf-grid-nav, .shelf-grid-nav ul, .shelf-grid__list {
-  margin: 0;
-  list-style:none
-}
-
 .shelf-grid__list::-webkit-scrollbar {
   display:none
 }
@@ -219,8 +214,6 @@ li {
   flex: 0 0 auto;
 }
 
-
-
 /* Arrow Button */
 
 .shelf-grid {
@@ -231,6 +224,20 @@ img {
   border-style:none
 }
 
+/* Shelf-grid-nav */
+/* 1258 */
+[type=button], [type=reset], [type=submit], button {
+  -webkit-appearance:button;
+  appearance: button;
+}
+
+/* 5575 */
+.shelf-grid-nav, .shelf-grid-nav ul, .shelf-grid__list {
+  margin: 0;
+  list-style:none
+}
+
+/* 5619 */
 .shelf-grid-nav__arrow {
   width: 40px;
   height: 100%;
@@ -245,51 +252,34 @@ img {
   z-index:1
 }
 
-.shelf-grid .shelf-grid-nav__arrow {
-  margin-top:var(--shelf-arrow-offset)
+
+/* 5690 */
+@media only screen and (hover: hover) and(pointer: fine) {
+  .shelf-grid--onhover .shelf-grid-nav__arrow {
+      opacity: 0;
+      transition:250ms background-color linear, 250ms color linear, 250ms opacity linear
+  }
+
+  .shelf-grid--onhover .shelf-grid-nav__arrow:focus, .shelf-grid--onhover:hover .shelf-grid-nav__arrow {
+      opacity:1
+  }
+
+  .shelf-grid--onhover:hover .shelf-grid-nav__arrow.disabled, .shelf-grid--onhover:hover .shelf-grid-nav__arrow:disabled {
+      opacity:0
+  }
 }
 
+/* 5705 */
 .shelf-grid-nav__arrow--next, .shelf-grid-nav__arrow--previous {
   top:0
 }
 
+/* 5709 */
 .shelf-grid-nav__arrow--next {
   right:0
 }
 
-.shelf-grid-nav__arrow--next::after {
-  transform:scaleX(-1)
-}
-
-.shelf-grid-nav__arrow:focus {
-  outline:0
-}
-
-.shelf-grid-nav__arrow::after {
-  margin: 0 auto;
-  position: relative;
-  top: 0;
-  display: block;
-  content: '';
-  width: 13px;
-  height: 29px;
-  opacity: .85;
-  background-repeat: no-repeat;
-  background-image: url(../assets/arrow-previous.svg);
-  z-index:1
-}
-
-@media (prefers-color-scheme: dark) {
-  .shelf-grid-nav__arrow::after {
-      background-image:url(../assets/arrow-previous.svg)
-  }
-}
-
-.shelf-grid-nav__arrow:hover {
-  text-decoration: none;
-}
-
-.shelf-grid-nav__arrow:active:not([disabled])::after {
-  transition: none;
-  opacity:1
+/* 20270 */
+.shelf-grid .shelf-grid-nav__arrow {
+  margin-top:var(--shelf-arrow-offset)
 }
