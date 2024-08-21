@@ -409,7 +409,7 @@ body, button, input, select, textarea {
 }
 
 .nav-header-auth .ember-basic-dropdown .ember-basic-dropdown-content-wormhole-origin {
-  position:relative
+  position: relative;
 }
 
 /* 16682 */
@@ -498,12 +498,12 @@ body, button, input, select, textarea {
 /* 16795 */
 .nav-header-auth .ember-basic-dropdown .ember-basic-dropdown-content .nav-header__user-dropdown-menu__option-text {
   display: flex;
-  align-items:center
+  align-items: center;
 }
 
 .nav-header-auth .ember-basic-dropdown .ember-basic-dropdown-content .nav-header__user-dropdown-menu__option-text:first-child {
   width: 100%;
-  height:100%
+  height: 100%;
 }
 
 /* 16821 */
@@ -551,4 +551,13 @@ body, button, input, select, textarea {
   top: -8px;
   border-color: transparent transparent var(--settingsMenuPointer);
   z-index:-1
+}
+
+.header__login-button {
+  width: fit-content;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
 }

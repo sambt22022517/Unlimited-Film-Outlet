@@ -1,41 +1,19 @@
-import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { SHA256 } from "crypto-js";
+import { AuthContext } from "../context/AuthContext";
 import '../styles/Login.css';
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const { login, error } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
-
-    const hashPassword = SHA256(password).toString();
-
-    console.log('Username:', username);
-    console.log('Hash Password:', hashPassword);
-    
-    try {
-      const response = await axios.post('http://localhost:8000/login', {
-        username,
-        hashPassword,
-      });
-
-      if (response.status === 200) {
-        alert("Bạn đã đăng nhập thành công!");
-        navigate('/');
-      } else {
-        setError("Thông tin đăng nhập không chính xác!");
-      }
-
-      console.log(response.data);
-
-    } catch (error) {
-      setError(error.message);
-      console.error('Error:', error);
+    const success = await login(username, password);
+    if (success) {
+      navigate('/');
     }
   };
 
@@ -67,7 +45,7 @@ function Login() {
           />
         </div>
         <button className="button-login" type="submit">Đăng Nhập</button>
-        {error && <div className="error-message">{error}</div>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
       <div className="links">
         <a href="/forgot-password">Quên mật khẩu?</a>

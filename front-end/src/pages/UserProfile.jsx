@@ -1,11 +1,16 @@
-import { useEffect, useState } from 'react';
-import '../styles/UserProfile.css';
+import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+// import { AuthContext } from '../context/AuthContext';
+import '../styles/UserProfile.css';
 
 const UserProfile = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  // const { isAuthenticated } = useContext(AuthContext);
+
+
 
   useEffect(() => {
     axios.get('/account')

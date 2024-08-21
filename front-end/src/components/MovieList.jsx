@@ -1,4 +1,5 @@
 import MovieCard from "./MovieCard";
+// import '../styles/index.css';
 import '../styles/MovieList.css';
 
 function MovieList({ title, items }) {
@@ -39,6 +40,7 @@ function MovieList({ title, items }) {
             >
               <MovieCard
                 key={item.id}
+                id={item.id}
                 title={item.title}
                 year={item.year}
                 genre={item.genre}

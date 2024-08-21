@@ -1,7 +1,7 @@
 import '../styles/MovieCard.css';
 
-function MovieCard({title, year, genre, ordinal, imageUrl }) {
-  const url_movie = `/movie/${ordinal}`;
+function MovieCard({id, title, year, genre, ordinal, imageUrl }) {
+  const url_movie = `/film/${id}`;
   return (
     <a 
       className="card-lockup"
