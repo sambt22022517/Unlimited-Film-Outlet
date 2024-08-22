@@ -140,7 +140,7 @@
     <!-- Custom scripts -->
     <script>
         function buynow(filmId) {
-          addToCart(filmId, 'true');
+          addToCart(filmId, 'True');
           fetch('/confirm-payment/create/', {
                 method: 'POST',
                 headers: {
@@ -172,7 +172,7 @@
                 },
                 body: JSON.stringify({ 
                   film_id: filmId, 
-                  selected:selected,
+                  selected: selected,
                 }),
             })
             .then(response => response.json())

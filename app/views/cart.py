@@ -13,7 +13,7 @@ def add_cart(film, user, selected):
     Cart.objects.create(
         user=user,
         film=film,
-        selected=selected
+        selected=bool(selected)
     )
     return (num_items_in_cart+1, "Thêm vào giỏ hàng thành công")
 
