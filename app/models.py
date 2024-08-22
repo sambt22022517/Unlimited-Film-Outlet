@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import datetime
 from multiselectfield import MultiSelectField
 
 class User(models.Model):
@@ -7,6 +6,9 @@ class User(models.Model):
     email = models.EmailField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
     total_click = models.PositiveIntegerField(default=0)
+    
+    def __str__(self):
+        return self.user_name
 
 option = [
     ("Chính kịch", "Chính kịch"),
@@ -45,10 +47,13 @@ class Film(models.Model):
     author = models.CharField(max_length=255, blank=True, null=True)  # Đạo diễn
     actor = models.CharField(max_length=4096, blank=True, null=True)  # Diễn viên
     genre = MultiSelectField(choices=option, blank=True, null=True)  # Thể loại
-    release_date = models.IntegerField(default=datetime.now().year)  # Ngày phát hành
+    release_date = models.IntegerField(default=2024)  # Ngày phát hành
     story = models.TextField(blank=True, null=True)  # Mô tả (có thể để trống)
     rating = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)  # Đánh giá (có thể để trống)
     price = models.DecimalField(max_digits=10, decimal_places=2)  # Giá phim
+
+    def __str__(self):
+        return self.film_name
 
 class Habit(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Người dùng nhấp chuột
@@ -62,12 +67,12 @@ class Cart(models.Model):
 
     def __str__(self) -> str:
         if hasattr(self, 'user'):
-            return self.user.user_name
+            return f'{self.user.user_name} - {self.film.film_name}'
         return "Unnamed Cart"
     
 class Bill(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    payment_date = models.DateTimeField(default=datetime.now())
+    payment_date = models.DateTimeField()
 
     COMPLETE = 'P'
     ERROR = 'E'
@@ -79,10 +84,10 @@ class Bill(models.Model):
     # lỗi (Không thanh toán được)
 
     ORDER_STATUS_CHOICES = [
-        (COMPLETE, 'Complete'),
-        (ERROR, 'Error'),
-        (CANCELLED, 'Cancelled'),
-        (NOT_COMPLETE, 'Not Complete'),
+        (COMPLETE, 'Đã thanh toán'),
+        (ERROR, 'Lỗi'),
+        (CANCELLED, 'Đã huỷ'),
+        (NOT_COMPLETE, 'Chưa thanh toán'),
     ]
     status = models.CharField(
         max_length=2,

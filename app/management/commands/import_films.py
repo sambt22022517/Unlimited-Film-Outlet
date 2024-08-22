@@ -27,7 +27,7 @@ def import_films_from_csv(csv_file_path):
             film.save()
 
             # Thêm ảnh bìa (cover) nếu có
-            cover_path = f'media/covers/cover{idx}.jpg'
+            cover_path = f'covers/cover{idx}.jpg'
             if cover_path:
                 with open(cover_path, 'rb') as cover_file:
                     film.cover.save(f"cover{idx}.jpg", File(cover_file))

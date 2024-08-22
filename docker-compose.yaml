@@ -24,11 +24,14 @@ services:
         ]
       timeout: 30s
 
-  web:
-    build:
-      dockerfile: WebDockerfile
-    container_name: UFO
-    command: python manage.py runserver 0.0.0.0:8000
+  backend:
+    build: .
+    container_name: UFO_backend
+    command: >
+      sh -c "
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000
+      "
     volumes:
       - .:/app
     ports:

@@ -1,29 +1,32 @@
 from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
-from . import views
+from .views import home, user, index, filter, film, cart, bill
 
 urlpatterns = [
-    path('login/', views.login, name='login'),
-    path('logout/', views.logout, name='logout'),
-    path('register/', views.register, name='register'),
-    path('', views.home, name='home'),
-    path('home/', views.home, name='home'),
-    path('index/', views.index, name='index'),
-    path('profile/', views.profile, name='profile'),
-    path('search/', views.search, name='search'),
-    path('film/<str:film_id>/', views.film_detail, name='film_detail'),
-    path('recommend/', views.recommend, name='recommend'),
-    path('profile/edit/', views.edit_profile, name='edit_profile'),
-    path('addcart/', views.render_add_cart, name='Addcart'),
-    path('updatecart/', views.render_update_cart, name='Updatecart'),
-    path('viewcart/', views.render_get_cart, name='Viewcart'),
-    path('viewbillforpayment/', views.render_bill_for_payment, name='Viewbillforpayment'),
-    path('paysuccess/', views.render_pay_success, name='Paysuccess'),
-    path('payfail/', views.render_pay_fail, name='Payfail'),
-    path('payerror/', views.render_pay_fail, name='Payerror'),
-    path('payment/', views.render_payment, name='Payment'),
-    path('viewbill/', views.render_bill, name='Viewbill'),
-    path('viewallbill/', views.render_all_bill, name='Viewallbill'),
+    path('', home.home, name='home'),
+    path('home/', home.home, name='home'),
+    
+    path('index/', index.index, name='index'),
+
+    path('login/', user.login, name='login'),
+    path('logout/', user.logout, name='logout'),
+    path('register/', user.register, name='register'),
+    path('profile/', user.profile, name='profile'),
+    path('profile/edit/', user.edit_profile, name='edit_profile'),
+
+    path('search/', filter.search, name='search'),
+    path('recommend/', filter.recommend, name='recommend'),
+
+    path('film/<str:film_id>/', film.film_detail, name='film_detail'),
+
+    path('cart/', cart.render_get_cart, name='Viewcart'),
+    path('add-to-cart/', cart.render_add_cart, name='Addcart'),
+    path('cart/remove/<str:item_id>/', cart.remove_from_cart, name='remove_from_cart'),
+    path('cart/select/<str:item_id>/', cart.select_cart_item, name='select_cart_item'),
+
+    path('confirm-payment/<str:type>/', bill.render_bill_for_payment, name='Viewbillforpayment'),
+    path('bill/<int:bill_id>/', bill.render_bill, name='render_bill'),
+    path('all-bill/', bill.render_all_bill, name='render_all_bill'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
