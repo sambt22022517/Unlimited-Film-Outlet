@@ -13,7 +13,7 @@ def add_cart(film, user, selected):
     Cart.objects.create(
         user=user,
         film=film,
-        selected=bool(selected)
+        selected=selected
     )
     return (num_items_in_cart+1, "Thêm vào giỏ hàng thành công")
 
@@ -25,7 +25,7 @@ def render_add_cart(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         id_film = data.get('film_id')
-        selected = data.get('selected', '')
+        selected = data.get('selected')
 
         user = User.objects.get(id=user_id)
         film = Film.objects.get(id=id_film)
@@ -92,27 +92,12 @@ def remove_from_cart(request, item_id):
     return JsonResponse(response_data, status=404)
 
 def select_cart_item(request, item_id):
-    user_id = request.session.get('user_id')
-
-    if user_id:
-        user = User.objects.get(id=user_id)
-    else:
-        return redirect('login')
-    
-    num_items_in_cart = len(Cart.objects.filter(user=user))
-    response_data = {
-        'user_name': user.user_name,
-        'email': user.email,
-        'num_items_in_cart': num_items_in_cart,
-        'user_logged_in': True,
-    }
-    
     if request.method == 'POST':
+        data = json.loads(request.body)
+        selected = data.get('selected')
+        
         item = Cart.objects.get(id=item_id)
-        item.selected = True
+        item.selected = selected
         item.save()
-        response_data.update({'success': True})
-        return JsonResponse(response_data, status=200)
-    
-    response_data.update({'success': False})
-    return JsonResponse(response_data, status=404)
+        return JsonResponse({'success': True}, status=200)
+    return JsonResponse({'success': False, 'error': "Method phải là POST"}, status=404)

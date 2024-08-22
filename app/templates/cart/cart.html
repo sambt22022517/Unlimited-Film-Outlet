@@ -177,6 +177,36 @@
           let checkboxes = document.querySelectorAll('.price-checkbox');
           checkboxes.forEach(function(checkbox) {
               checkbox.checked = this.checked;
+
+              const itemId = checkbox.getAttribute('data-id');  // Lấy ID sản phẩm từ thuộc tính data-id
+              const isChecked = checkbox.checked;  // Kiểm tra trạng thái của checkbox
+
+              const url = `/cart/select/${itemId}/`;  // URL để cập nhật trạng thái
+
+              // Gửi yêu cầu AJAX đến server để cập nhật trạng thái
+              fetch(url, {
+                  method: 'POST',
+                  headers: {
+                      'X-CSRFToken': getCookie('csrftoken'),  // Thêm token CSRF nếu cần
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                      'selected': isChecked  // Gửi trạng thái select (True/False)
+                  })
+              })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      console.log('Trạng thái của sản phẩm đã được cập nhật thành công.');
+                  } else {
+                      console.error('Error:', data);
+                      alert('Có lỗi xảy ra khi cập nhật trạng thái của sản phẩm.');
+                  }
+              })
+              .catch(error => {
+                  console.error('Fetch error:', error);
+                  alert('Có lỗi xảy ra khi cập nhật trạng thái của sản phẩm.');
+              });
           }, this);
           updateTotalPrice();
       });
@@ -187,6 +217,9 @@
               document.querySelector('.all-checkbox').checked = allChecked;
           });
       });
+
+      let allChecked = document.querySelectorAll('.price-checkbox:checked').length === document.querySelectorAll('.price-checkbox').length;
+      document.querySelector('.all-checkbox').checked = allChecked;
 
       // Hàm để cập nhật tổng số tiền
       function updateTotalPrice() {
@@ -319,7 +352,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        'select': isChecked  // Gửi trạng thái select (True/False)
+                        'selected': isChecked  // Gửi trạng thái select (True/False)
                     })
                 })
                 .then(response => response.json())
