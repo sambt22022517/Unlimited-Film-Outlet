@@ -12,7 +12,7 @@
                         </a>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">{{ film.film_name|truncatechars:15 }}</h5>
+                        <a href="/film/{{ film.id }}"><h5 class="card-title">{{ film.film_name|truncatechars:15 }}</h5></a>
                         <p class="card-text">{{ film.story|truncatechars:40 }}</p>
                         <span class="me-2 d-flex align-items-center" style="font-size: large;">{{ film.price|floatformat:0 }}đ</span>
                         <a href="/film/{{ film.id }}" class="btn btn-primary">Xem thông tin</a>
