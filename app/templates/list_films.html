@@ -1,0 +1,30 @@
+{% load static %}
+<div class="container"  style="padding: 50px;">
+    <div class="row">
+        {% for film in films %}
+            <!-- Card -->
+            <div class="col-md">
+                <div class="card mb-5">
+                    <div class="bg-image hover-overlay" data-mdb-ripple-init data-mdb-ripple-color="light">
+                        <img src="{{ film.imageUrl }}" class="img-fluid" />
+                        <a href="/film/{{ film.id }}">
+                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <a href="/film/{{ film.id }}"><h5 class="card-title">{{ film.film_name|truncatechars:15 }}</h5></a>
+                        <p class="card-text">{{ film.story|truncatechars:40 }}</p>
+                        <span class="me-2 d-flex align-items-center" style="font-size: large;">{{ film.price|floatformat:0 }}đ</span>
+                        <a href="/film/{{ film.id }}" class="btn btn-primary">Xem thông tin</a>
+                    </div>
+                </div>
+                <!-- Card -->
+            </div>
+            <!-- Column -->
+
+            {% if forloop.counter|divisibleby:max_in_row and not forloop.last %}
+              </div><div class="row">
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

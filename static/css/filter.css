@@ -1,0 +1,57 @@
+.ul-search {
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+    unicode-bidi: isolate;
+}
+
+li {
+    list-style: none;
+    display: list-item;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+}
+
+ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+.ul-search li {
+    float: left;
+    overflow: hidden;
+    position: relative;
+}
+
+.ul-search li input {
+    width: 20px;
+    vertical-align: middle;
+    margin-bottom: 3px;
+}
+
+input[type="checkbox" i] {
+    background-color: initial;
+    cursor: default;
+    appearance: auto;
+    box-sizing: border-box;
+    border: initial;
+}
+
+.filter {
+    margin-top: 50px;
+}
+
+.col-md-6 {
+    float: left;
+    padding: 10px;
+}

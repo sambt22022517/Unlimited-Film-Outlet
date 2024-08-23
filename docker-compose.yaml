@@ -1,7 +1,7 @@
 version: '3'
 services:
   db:
-    image: mariadb
+    image: mariadb:latest
     container_name: database
     restart: always
     environment:
@@ -24,10 +24,14 @@ services:
         ]
       timeout: 30s
 
-  web:
+  backend:
     build: .
-    container_name: UFO
-    command: python manage.py runserver 0.0.0.0:8000
+    container_name: UFO_backend
+    command: >
+      sh -c "
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000
+      "
     volumes:
       - .:/app
     ports:

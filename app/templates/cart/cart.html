@@ -1,0 +1,399 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-mdb-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Giỏ hàng</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <!-- Google Fonts Roboto -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+    />
+    <!-- MDB -->
+    <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+  </head>
+  <body>
+    <!-- Start your project here-->
+    <!-- Navbar -->
+    {% include 'nav.html' with num_items_in_cart=num_items_in_cart user_logged_in=user_logged_in %}
+    <!-- Navbar -->
+
+    <!-- Cart List -->
+    <section class="h-100 h-custom" style="background-color: #eee;">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+              <div class="card">
+                <div class="card-body p-4">
+      
+                  <div class="row">
+      
+                    <div class="col-lg-7">
+                      <h5 class="mb-3"><a href="/home" class="text-body"><i
+                            class="fas fa-long-arrow-alt-left me-2"></i>Tiếp tục mua sắm</a></h5>
+                      <hr>
+      
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                          {% if num_items_in_cart > 0 %}
+                            <p class="mb-1">Giỏ hàng của bạn</p>
+                            <div class="justify-content-between" style="margin-left: 25px;">
+                                <input type="checkbox" style="margin-right: 10px;" class="all-checkbox">Tất cả
+                            </div>
+                          {% else %}
+                            <p class="mb-1">Bạn chưa có gì trong giỏ hàng</p>
+                          {% endif %}
+                        </div>
+                      </div>
+                      {% for item in carts %}
+                        <div class="card mb-3">
+                          <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                              <div class="d-flex flex-row align-items-center">
+                                {% if item.selected %}
+                                  <input type="checkbox" checked style="margin-right: 10px;" class="price-checkbox" data-id="{{ item.id }}" data-price="{{ item.film.price|floatformat:0 }}">
+                                {% else %}
+                                  <input type="checkbox" style="margin-right: 10px;" class="price-checkbox" data-id="{{ item.id }}" data-price="{{ item.film.price|floatformat:0 }}">
+                                {% endif %}
+                                
+                                <div>
+                                  <a href="{% url 'film_detail' item.film.id %}" class="text-decoration-none">
+                                    <img
+                                      src="{{ item.film.imageUrl }}"
+                                      class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                                    </a>
+                                </div>
+                                <div class="ms-3">
+                                  <a href="{% url 'film_detail' item.film.id %}" class="text-decoration-none">
+                                    <h5>{{ item.film.film_name }}</h5>
+                                  </a>
+                                  <p class="small mb-0">{{ item.film.genre }}</p>
+                                </div>
+                              </div>
+                              <div class="d-flex flex-row align-items-center">
+                                <div style="width: 100px;">
+                                  <h6 class="mb-0">{{ item.film.price|floatformat:0 }}đ</h6>
+                                </div>
+                                <a href="#!" style="color: #cecece;" class="delete-item" data-id="{{ item.id }}"><i class="fas fa-trash-alt"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      {% endfor %}
+      
+                    </div>
+                    <div class="col-lg-5">
+      
+                      <div class="card bg-primary text-white rounded-3">
+                        <div class="card-body">
+                          <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="mb-0">Thông tin hoá đơn</h5>
+                            <img src="{% static 'img/user-avatar.png' %}"
+                              class="img-fluid rounded-3" style="width: 45px;" alt="Avatar">
+                          </div>
+      
+                          <form class="mt-4">
+      
+                            <div data-mdb-input-init class="form-outline form-white mb-4">
+                              <input type="text" id="typeText" class="form-control form-control-lg" size="17"
+                                placeholder="sample@gmail.com" minlength="19" maxlength="19" value="{{ email }}"/>
+                              <label class="form-label" for="typeText">Email</label>
+                            </div>
+      
+                            <div data-mdb-input-init class="form-outline form-white mb-4">
+                              <input type="text" id="typeText" class="form-control form-control-lg" size="17"
+                                placeholder="1234 5678 9012 3457" minlength="19" maxlength="19" value="1234 5678 9012 3457" />
+                              <label class="form-label" for="typeText">Số thẻ</label>
+                            </div>
+      
+                            <div class="row mb-4">
+                              <div class="col-md-6">
+                                <div data-mdb-input-init class="form-outline form-white">
+                                  <input type="text" id="typeExp" class="form-control form-control-lg"
+                                    placeholder="MM/YYYY" size="7" id="exp" minlength="7" maxlength="7" value="00/0000"/>
+                                  <label class="form-label" for="typeExp">Ngày hết hạn</label>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div data-mdb-input-init class="form-outline form-white">
+                                  <input type="password" id="typeText" class="form-control form-control-lg"
+                                    placeholder="&#9679;&#9679;&#9679;" size="1" minlength="3" maxlength="3" value="&#9679;&#9679;&#9679;"/>
+                                  <label class="form-label" for="typeText">Số CVV</label>
+                                </div>
+                              </div>
+                            </div>
+      
+                          </form>
+      
+                          <hr class="my-4">
+      
+                          <div class="d-flex justify-content-between mb-4">
+                            <p class="mb-2">Tổng</p>
+                            <p class="mb-2 totalPrice"></p>
+                          </div>
+      
+                          <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-block btn-lg" id="checkoutButton">
+                            <div class="d-flex justify-content-between">
+                              <span class="totalPrice" id="totalPrice"></span>
+                              <span>Thanh toán<i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                            </div>
+                          </button>
+      
+                        </div>
+                      </div>
+      
+                    </div>
+      
+                  </div>
+      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+    <!-- Cart List -->
+
+    <!-- Footer -->
+    {% include 'footer.html' %} 
+    <!-- Footer -->
+
+    <!-- End your project here-->
+
+    <!-- MDB -->
+    <script type="text/javascript" src="{% static 'js/mdb.umd.min.js' %}"></script>
+    <!-- Custom scripts -->
+    <script>
+      document.querySelector('.all-checkbox').addEventListener('change', function() {
+          let checkboxes = document.querySelectorAll('.price-checkbox');
+          checkboxes.forEach(function(checkbox) {
+              checkbox.checked = this.checked;
+
+              const itemId = checkbox.getAttribute('data-id');  // Lấy ID sản phẩm từ thuộc tính data-id
+              const isChecked = checkbox.checked;  // Kiểm tra trạng thái của checkbox
+
+              const url = `/cart/select/${itemId}/`;  // URL để cập nhật trạng thái
+
+              // Gửi yêu cầu AJAX đến server để cập nhật trạng thái
+              fetch(url, {
+                  method: 'POST',
+                  headers: {
+                      'X-CSRFToken': getCookie('csrftoken'),  // Thêm token CSRF nếu cần
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                      'selected': isChecked  // Gửi trạng thái select (True/False)
+                  })
+              })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      console.log('Trạng thái của sản phẩm đã được cập nhật thành công.');
+                  } else {
+                      console.error('Error:', data);
+                      alert('Có lỗi xảy ra khi cập nhật trạng thái của sản phẩm.');
+                  }
+              })
+              .catch(error => {
+                  console.error('Fetch error:', error);
+                  alert('Có lỗi xảy ra khi cập nhật trạng thái của sản phẩm.');
+              });
+          }, this);
+          updateTotalPrice();
+      });
+
+      document.querySelectorAll('.price-checkbox').forEach(function(checkbox) {
+          checkbox.addEventListener('change', function() {
+              let allChecked = document.querySelectorAll('.price-checkbox:checked').length === document.querySelectorAll('.price-checkbox').length;
+              document.querySelector('.all-checkbox').checked = allChecked;
+          });
+      });
+
+      let allChecked = document.querySelectorAll('.price-checkbox:checked').length === document.querySelectorAll('.price-checkbox').length;
+      document.querySelector('.all-checkbox').checked = allChecked;
+
+      // Hàm để cập nhật tổng số tiền
+      function updateTotalPrice() {
+        let filmtotal = 0;
+        
+        // Lặp qua tất cả các checkbox
+        document.querySelectorAll('.price-checkbox').forEach(function(checkbox) {
+          // Nếu checkbox được chọn, cộng giá của nó vào tổng
+          if (checkbox.checked) {
+            filmtotal += parseFloat(checkbox.getAttribute('data-price'));
+          }
+        });
+        
+        let total = filmtotal;
+        document.querySelectorAll('.totalPrice').forEach(function(element) {
+          element.innerText = total.toLocaleString('vi-VN');
+        });
+      }
+
+      // Gọi hàm mỗi khi checkbox thay đổi trạng thái
+      document.querySelectorAll('.price-checkbox').forEach(function(checkbox) {
+        checkbox.addEventListener('change', updateTotalPrice);
+      });
+
+      // Gọi hàm khi trang được tải để hiển thị đúng tổng số tiền ban đầu
+      updateTotalPrice();
+      
+      document.getElementById("checkoutButton").addEventListener("click", function() {
+        // Tham số cần kiểm tra (ví dụ: số lượng sản phẩm trong giỏ hàng)
+        const itemCount = parseInt(document.getElementById("cart-count").innerText, 10);
+
+        // Kiểm tra xem có ít nhất một sản phẩm được chọn không
+        const checkboxes = document.querySelectorAll(".price-checkbox");
+        let hasCheckedItem = false;
+
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                hasCheckedItem = true;
+            }
+        });
+
+        if (itemCount > 0 && hasCheckedItem) {
+            // Chuyển hướng đến trang xác nhận thanh toán nếu có sản phẩm được chọn và số lượng sản phẩm lớn hơn 0
+            const totalPriceInput = document.getElementById('totalPrice');
+            const totalPrice = totalPriceInput.textContent;
+            const totalPriceNumber = parseInt(totalPrice.replace(/\./g, ''), 10);
+
+            fetch('/confirm-payment/create/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')  // Đảm bảo bạn gửi CSRF token nếu dùng Django
+                },
+                body: JSON.stringify({ 
+                  'total_price': totalPriceNumber,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Chuyển hướng đến trang khác
+                    let id = data.type;  // Lấy giá trị ID từ phản hồi của server
+                    window.location.href = `/confirm-payment/${id}/`;  
+                } else {
+                    // Xử lý nếu server trả về lỗi
+                    alert('Có lỗi xảy ra: ' + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        } else if (itemCount > 0 && !hasCheckedItem) {
+            // Thông báo nếu có sản phẩm nhưng chưa có sản phẩm nào được chọn
+            alert("Bạn chưa chọn sản phẩm nào.");
+        } else {
+            // Thông báo nếu giỏ hàng không có sản phẩm nào
+            alert("Giỏ hàng không có sản phẩm nào.");
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", function() {
+        // Xử lý sự kiện nhấp chuột vào các nút xóa
+        document.querySelectorAll('.delete-item').forEach(function(deleteButton) {
+          deleteButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+            const itemId = this.getAttribute('data-id'); // Lấy ID sản phẩm từ thuộc tính data-id
+            const url = `/cart/remove/${itemId}/`; // Đường dẫn API để xóa sản phẩm
+
+            // Gửi yêu cầu AJAX đến server
+            fetch(url, {
+              method: 'DELETE',
+              headers: {
+                'X-CSRFToken': getCookie('csrftoken'), // Thêm token CSRF nếu cần
+                'Content-Type': 'application/json'
+              },
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                // Xóa phần tử khỏi giao diện người dùng
+                this.closest('.card').remove(); // Xóa phần tử card chứa nút xóa
+
+                let cartCount = document.getElementById('cart-count');
+                cartCount.innerText = data.num_items_in_cart;
+
+                // Hiển thị badge nếu số lượng sản phẩm > 0, ẩn nếu bằng 0
+                if (data.num_items_in_cart > 0) {
+                    cartCount.style.display = 'inline-block';
+                } else {
+                    cartCount.style.display = 'none';
+                }
+
+                updateTotalPrice();
+              } else {
+                console.error('Error:', data);
+                alert('Có lỗi xảy ra khi xóa sản phẩm.');
+              }
+            })
+            .catch(error => console.error('Fetch error:', error));
+          });
+        });
+      })
+
+      document.addEventListener("DOMContentLoaded", function() {
+        // Xử lý sự kiện khi thay đổi trạng thái của checkbox
+        document.querySelectorAll('.price-checkbox').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const itemId = this.getAttribute('data-id');  // Lấy ID sản phẩm từ thuộc tính data-id
+                const isChecked = this.checked;  // Kiểm tra trạng thái của checkbox
+
+                const url = `/cart/select/${itemId}/`;  // URL để cập nhật trạng thái
+
+                // Gửi yêu cầu AJAX đến server để cập nhật trạng thái
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),  // Thêm token CSRF nếu cần
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'selected': isChecked  // Gửi trạng thái select (True/False)
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Trạng thái của sản phẩm đã được cập nhật thành công.');
+                    } else {
+                        console.error('Error:', data);
+                        alert('Có lỗi xảy ra khi cập nhật trạng thái của sản phẩm.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    alert('Có lỗi xảy ra khi cập nhật trạng thái của sản phẩm.');
+                });
+            });
+        });
+      })
+
+      // Hàm để lấy giá trị CSRF token từ cookie
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+    </script>
+  </body>
+</html>
