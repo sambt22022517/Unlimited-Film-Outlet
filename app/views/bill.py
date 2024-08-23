@@ -1,8 +1,9 @@
-from ..models import User, Cart, BillItem, Bill
+from ..models import User, Cart, BillItem, Bill, Film
 from django.shortcuts import render, redirect
 from ..serializers import FilmSerializer
 from datetime import datetime
 from django.http import JsonResponse
+import json
 
 COMPLETE = 'P'
 ERROR = 'E'
@@ -22,31 +23,44 @@ def render_bill_for_payment(request, type):
         'email': user.email,
         'num_items_in_cart': num_items_in_cart,
         'user_logged_in': True,
-    }
-    
-    carts = Cart.objects.filter(user=user, selected=True)
-    film_price = 0
-    films = []
-    for cart in carts:
-        film = cart.film
-        price = film.price
-        film_price += price
-        films.append(film)
-    serializer = FilmSerializer(films, many=True, context={'request': request})
+    }    
 
     if request.method == 'POST':
-        bill = Bill(user=user, payment_date=datetime.now(), total_price=film_price)
-        bill.save()
-        for cart in carts:
-            billitem = BillItem(bill=bill, film=cart.film)
-            billitem.save()
-        return JsonResponse({'success': True, 'type': bill.id,}, status=200)
-    else:
-        bill = Bill.objects.get(id=int(type))
+        if type == 'create':
+            data = json.loads(request.body)
+            total_price = data.get('total_price')
+
+            carts = Cart.objects.filter(user=user, selected=True)
+            bill = Bill(user=user, payment_date=datetime.now(), total_price=total_price)
+            bill.save()
+            for cart in carts:
+                item = BillItem(bill=bill, film=cart.film)
+                item.save()
+                cart.delete()
+            return JsonResponse({'success': True, 'type': bill.id,}, status=200)
+        elif type == 'buynow':
+            data = json.loads(request.body)
+            total_price = data.get('total_price')
+            film_id = data.get('film_id')
+            
+            bill = Bill(user=user, payment_date=datetime.now(), total_price=total_price)
+            bill.save()
+            
+            film = Film.objects.get(id=film_id)
+            item = BillItem(bill=bill, film=film)
+            item.save()
+            return JsonResponse({'success': True, 'type': bill.id,}, status=200)
+
+    bill = Bill.objects.get(id=int(type))
+    items = BillItem.objects.filter(bill=bill)
+    films = []
+    for item in items:
+        films.append(item.film)
+    serializer = FilmSerializer(films, many=True, context={'request': request})
 
     response_data.update({
         'films': serializer.data,
-        'total_price': film_price,
+        'total_price': bill.total_price,
         'bill': bill,
     })
 
@@ -70,16 +84,12 @@ def render_bill(request, bill_id):
     if request.method == 'POST':
         action = request.POST.get('action')
 
-        carts = Cart.objects.filter(user=user, selected=True)
-
         if action == 'checkout':
             bill.status = COMPLETE
             bill.save()
-            carts.delete()
         elif action == 'cancel':
             bill.status = CANCELLED
             bill.save()
-            carts.delete()
         elif action == 'back':
             return redirect('/cart')
         elif action == 'list-bill':
@@ -110,7 +120,7 @@ def render_all_bill(request):
         return redirect('login')
     
     num_items_in_cart = len(Cart.objects.filter(user=user))
-    bills = Bill.objects.filter(user=user)
+    bills = Bill.objects.filter(user=user).order_by('-payment_date')
     response_data = {
         'user_name': user.user_name,
         'email': user.email,

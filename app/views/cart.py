@@ -13,7 +13,7 @@ def add_cart(film, user, selected):
     Cart.objects.create(
         user=user,
         film=film,
-        selected=bool(selected)
+        selected=selected
     )
     return (num_items_in_cart+1, "Thêm vào giỏ hàng thành công")
 
@@ -25,12 +25,11 @@ def render_add_cart(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         id_film = data.get('film_id')
-        selected = data.get('selected')
 
         user = User.objects.get(id=user_id)
         film = Film.objects.get(id=id_film)
 
-        num_items_in_cart, notification = add_cart(film, user, selected)
+        num_items_in_cart, notification = add_cart(film, user, True)
         return JsonResponse({
             'success': True,
             'num_items_in_cart': num_items_in_cart,

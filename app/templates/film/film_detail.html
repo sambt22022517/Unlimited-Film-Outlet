@@ -50,8 +50,8 @@
                     class=" img-fluid" style="width: 300px;">
                   <h4 class="my-3">{{ film.film_name }}</h4>
                   <div class="d-flex justify-content-center mb-2">
-                    <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary" id="buyButton" onclick="buynow('{{ film.id }}')">Mua ngay</button>
-                    <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary ms-1" onclick="addToCart('{{ film.id }}', '')">Thêm vào giỏ hàng</button>
+                    <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary" id="buyButton" onclick="buynow('{{ film.id }}', '{{ film.price }}')">Mua ngay</button>
+                    <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary ms-1" onclick="addToCart('{{ film.id }}')">Thêm vào giỏ hàng</button>
                   </div>
                 </div>
               </div>
@@ -108,7 +108,7 @@
                     <div class="col-sm-3">
                       <p class="mb-0">Giá</p>
                     </div>
-                    <div class="col-sm-9">
+                    <div class="col-sm-9" id="filmPrice" value="{{ film.price }}">
                       <h3 class="text-muted mb-0">{{ film.price|floatformat:0 }}đ</h3>
                     </div>
                   </div>
@@ -139,14 +139,17 @@
     <script type="text/javascript" src="{% static 'js/mdb.umd.min.js' %}"></script>
     <!-- Custom scripts -->
     <script>
-        function buynow(filmId) {
-          addToCart(filmId, 'True');
-          fetch('/confirm-payment/create/', {
+        function buynow(filmId, price) {
+          fetch('/confirm-payment/buynow/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCookie('csrftoken')  // Đảm bảo bạn gửi CSRF token nếu dùng Django
                 },
+                body: JSON.stringify({ 
+                  'total_price': price,
+                  'film_id': filmId,
+                }),
             })
             .then(response => response.json())
             .then(data => {
@@ -162,7 +165,7 @@
             .catch(error => console.error('Error:', error));
         };
 
-        function addToCart(filmId, selected) {
+        function addToCart(filmId) {
             // Gửi yêu cầu AJAX tới server để thêm sản phẩm vào giỏ hàng
             fetch(`/add-to-cart/`, {
                 method: 'POST',
@@ -171,8 +174,7 @@
                     'X-CSRFToken': getCookie('csrftoken'),  // Lấy CSRF token
                 },
                 body: JSON.stringify({ 
-                  film_id: filmId, 
-                  selected: selected,
+                  film_id: filmId,
                 }),
             })
             .then(response => response.json())

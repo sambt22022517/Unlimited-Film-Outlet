@@ -143,7 +143,7 @@
       
                           <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-block btn-lg" id="checkoutButton">
                             <div class="d-flex justify-content-between">
-                              <span class="totalPrice"></span>
+                              <span class="totalPrice" id="totalPrice"></span>
                               <span>Thanh toán<i class="fas fa-long-arrow-alt-right ms-2"></i></span>
                             </div>
                           </button>
@@ -263,12 +263,19 @@
 
         if (itemCount > 0 && hasCheckedItem) {
             // Chuyển hướng đến trang xác nhận thanh toán nếu có sản phẩm được chọn và số lượng sản phẩm lớn hơn 0
+            const totalPriceInput = document.getElementById('totalPrice');
+            const totalPrice = totalPriceInput.textContent;
+            const totalPriceNumber = parseInt(totalPrice.replace(/\./g, ''), 10);
+
             fetch('/confirm-payment/create/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCookie('csrftoken')  // Đảm bảo bạn gửi CSRF token nếu dùng Django
                 },
+                body: JSON.stringify({ 
+                  'total_price': totalPriceNumber,
+                }),
             })
             .then(response => response.json())
             .then(data => {
