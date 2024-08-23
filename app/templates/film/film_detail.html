@@ -162,7 +162,10 @@
                     alert('Bạn phải đăng nhập trước khi sử dụng chức năng này.');
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Bạn phải đăng nhập trước khi sử dụng chức năng này.');
+            });
         };
 
         function addToCart(filmId) {
