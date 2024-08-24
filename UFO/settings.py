@@ -19,19 +19,6 @@ env = environ.Env(
 )
 environ.Env.read_env('.env')
 
-# Thanh toán paypal
-# import paypalrestsdk
-
-# PAYPAL_CLIENT_ID = 'AbTH6F7aDIQFY09Fq6NIcvzEMbMxR_abPFjGK0Rfx8lI91VRjotVFTdYG3tIXlGblSTAflXmcw5vr2gk'
-# PAYPAL_CLIENT_SECRET = 'EKWs7bSnEGBQMeIBH8AmPtBgdbdB3jWa5lxU-IlFPJS1CAKfsKm_DX1Tt8fWtv953YpYQnNIsCh-qzjn'
-# PAYPAL_MODE = 'sandbox'  # sandbox hoặc live
-
-# paypalrestsdk.configure({
-#   "mode": PAYPAL_MODE,  # sandbox hoặc live
-#   "client_id": PAYPAL_CLIENT_ID,
-#   "client_secret": PAYPAL_CLIENT_SECRET
-# })
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -105,11 +92,7 @@ WSGI_APPLICATION = 'UFO.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': env("DATABASE_ENGINE"),
-        'NAME': env("DATABASE_NAME"),
-        'USER': env("DATABASE_USER"),
-        'PASSWORD': env("DATABASE_PASSWORD"),
-        'HOST': env("DATABASE_HOST"),
-        'PORT': env("DATABASE_PORT"),
+        'NAME': os.path.join(BASE_DIR, env("DATABASE_NAME")),
     },
 }
 
