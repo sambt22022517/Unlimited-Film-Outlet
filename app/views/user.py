@@ -90,19 +90,30 @@ def edit_profile(request):
         data = json.loads(request.body)
         user_name = data.get('user_name')
         email = data.get('email')
-        
+
         response_data = {'success': True, 'error':''}
-        if user_name and email:
+        if user_name == '' or email == '':
+            response_data['success'] = False
+            response_data['error'] = 'Thông tin thay đổi không được để trống'
+        else:
             user_exist = User.objects.filter(user_name=user_name).exists()
             email_exist = User.objects.filter(email=email).exists()
 
             if user_exist and email_exist:
                 response_data['success'] = False
-                response_data['error'] += 'Tên người dùng và Email đã được sử dụng'
+                response_data['error'] = 'Tên người dùng và Email đã được sử dụng'
             elif not user_exist and email_exist:
-                user.user_name = user_name
+                if email != user.email:
+                    response_data['success'] = False
+                    response_data['error'] = 'Email đã được sử dụng'
+                else:
+                    user.user_name = user_name
             elif user_exist and not email_exist:
-                user.email = email
+                if user_name != user.user_name:
+                    response_data['success'] = False
+                    response_data['error'] = 'Tên người dùng đã được sử dụng'
+                else:
+                    user.email = email
             else:
                 user.user_name = user_name
                 user.email = email
