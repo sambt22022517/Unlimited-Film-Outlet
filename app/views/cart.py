@@ -91,6 +91,13 @@ def remove_from_cart(request, item_id):
     return JsonResponse(response_data, status=404)
 
 def select_cart_item(request, item_id):
+    user_id = request.session.get('user_id')
+
+    if user_id:
+        user = User.objects.get(id=user_id)
+    else:
+        return redirect('login')
+    
     if request.method == 'POST':
         data = json.loads(request.body)
         selected = data.get('selected')
