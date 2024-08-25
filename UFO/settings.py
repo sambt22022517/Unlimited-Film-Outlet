@@ -55,10 +55,6 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',  # Địa chỉ của React development server
-]
-
 ROOT_URLCONF = 'UFO.urls'
 
 TEMPLATES = [
