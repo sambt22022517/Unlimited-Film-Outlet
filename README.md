@@ -9,9 +9,4 @@ docker compose build
 ```bash
 docker compose up
 ```
-4. Chạy
-```bash
-docker compose exec backend python manage.py import_films film_vietnamese.csv
-```
-
-5. Mở link [localhost:8000](http://localhost:8000/)
+4. Mở link [localhost:8000](http://localhost:8000/)
