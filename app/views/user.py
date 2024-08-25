@@ -109,7 +109,7 @@ def edit_profile(request):
 
         user.save()
         
-        return JsonResponse(response_data)  # Cập nhật thành công
+        return JsonResponse(response_data)
     
     # Nếu là GET request, render trang edit profile với thông tin hiện tại của user
     context = {

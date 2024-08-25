@@ -15,6 +15,8 @@ def home(request):
         }
     else:
         response_data = {
+            'user_name': '',
+            'num_items_in_cart': 0,
             'user_logged_in': False,
         }
 
