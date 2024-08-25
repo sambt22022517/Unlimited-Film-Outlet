@@ -1,9 +1,0 @@
-SECRET_KEY=your_django_secret_key
-DATABASE_ENGINE=your_backend_engine
-DATABASE_NAME=your_database_name
-DATABASE_USER=your_username
-DATABASE_PASSWORD=your_password
-DATABASE_HOST=your_database_service
-DATABASE_PORT=your_database_port
-TIME_ZONE=your_time_zone
-LANGUAGE_CODE=your_language_code
