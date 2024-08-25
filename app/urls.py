@@ -20,12 +20,12 @@ urlpatterns = [
 
     path('film/<str:film_id>/', film.film_detail, name='film_detail'),
 
-    path('cart/', cart.render_get_cart, name='Viewcart'),
-    path('add-to-cart/', cart.render_add_cart, name='Addcart'),
+    path('cart/', cart.render_get_cart, name='render_get_cart'),
+    path('add-to-cart/', cart.render_add_cart, name='render_add_cart'),
     path('cart/remove/<str:item_id>/', cart.remove_from_cart, name='remove_from_cart'),
     path('cart/select/<str:item_id>/', cart.select_cart_item, name='select_cart_item'),
 
-    path('confirm-payment/<str:type>/', bill.render_bill_for_payment, name='Viewbillforpayment'),
+    path('confirm-payment/<str:type>/', bill.render_bill_for_payment, name='render_bill_for_payment'),
     path('bill/<int:bill_id>/', bill.render_bill, name='render_bill'),
     path('all-bill/', bill.render_all_bill, name='render_all_bill'),
 ]

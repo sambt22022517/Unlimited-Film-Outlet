@@ -18,7 +18,7 @@ def add_cart(film, user, selected):
     return (num_items_in_cart+1, "Thêm vào giỏ hàng thành công")
 
 def render_add_cart(request):
-    user_id = request.session['user_id']
+    user_id = request.session.get('user_id')
     if not user_id:
         return redirect('login')
     

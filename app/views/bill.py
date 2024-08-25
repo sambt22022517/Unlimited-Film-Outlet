@@ -8,6 +8,7 @@ import json
 COMPLETE = 'P'
 ERROR = 'E'
 CANCELLED = 'C'
+NOT_COMPLETE = 'N'
 
 def render_bill_for_payment(request, type):
     user_id = request.session.get('user_id')

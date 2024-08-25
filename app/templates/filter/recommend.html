@@ -179,14 +179,23 @@
 
                         const card = document.createElement('div');
                         card.className = 'card mb-5';
+                        card.style.height = '500px';
+                        card.style.width = '192px';
 
                         const cardImage = document.createElement('div');
                         cardImage.className = 'bg-image hover-overlay';
                         cardImage.setAttribute('data-mdb-ripple-init', '');
                         cardImage.setAttribute('data-mdb-ripple-color', 'light');
+                        cardImage.style.height = '30vh';
+                        cardImage.style.display = 'flex';
+                        cardImage.style.flexDirection = 'column';
+                        cardImage.style.alignItems = 'center';
 
                         const img = document.createElement('img');
                         img.className = 'img-fluid';
+                        img.style.height = '100vh';
+                        img.style.width = 'auto';
+                        img.style.objectFit = 'cover';
                         img.src = film.imageUrl;
 
                         const link = document.createElement('a');
@@ -203,13 +212,58 @@
                         const cardBody = document.createElement('div');
                         cardBody.className = 'card-body';
 
-                        const title = document.createElement('h5');
-                        title.className = 'card-title';
-                        title.textContent = film.film_name.length > 15 ? film.film_name.substring(0, 15) + '...' : film.film_name;
+                        const titleContainer = document.createElement('div');
+                        titleContainer.style.height = '8vh';
+                        titleContainer.style.overflow = 'hidden';
 
-                        const text = document.createElement('p');
-                        text.className = 'card-text';
-                        text.textContent = film.story.length > 40 ? film.story.substring(0, 40) + '...' : film.story;
+                        const title = document.createElement('h5');
+                        title.className = 'card-title filmTitle';
+                        title.style.overflow = 'hidden';
+                        title.style.textOverflow = 'ellipsis';
+                        title.style.display = '-webkit-box';
+                        title.style.webkitLineClamp = '2';
+                        title.style.webkitBoxOrient = 'vertical';
+                        title.textContent = film.film_name;
+
+                        const titleLink = document.createElement('a');
+                        titleLink.href = `/film/${film.id}`;
+                        titleLink.appendChild(title);
+
+                        titleContainer.appendChild(titleLink);
+
+                        const storyContainer = document.createElement('div');
+                        storyContainer.style.height = '16vh';
+
+                        const story = document.createElement('p');
+                        story.className = 'card-text filmStory';
+                        story.style.overflow = 'hidden';
+                        story.style.textOverflow = 'ellipsis';
+                        story.style.display = '-webkit-box';
+                        story.style.webkitLineClamp = '4';
+                        story.style.webkitBoxOrient = 'vertical';
+                        story.textContent = film.story;
+
+                        storyContainer.appendChild(story);
+
+                        const genreContainer = document.createElement('div');
+                        genreContainer.style.height = '4vh';
+
+                        const genre = document.createElement('p');
+                        genre.className = 'card-text text-muted small filmGenre';
+                        genre.style.overflow = 'hidden';
+                        genre.style.textOverflow = 'ellipsis';
+                        genre.style.display = '-webkit-box';
+                        genre.style.webkitLineClamp = '1';
+                        genre.style.webkitBoxOrient = 'vertical';
+                        genre.textContent = film.genre;
+
+                        genreContainer.appendChild(genre);
+
+                        const priceContainer = document.createElement('div');
+                        priceContainer.style.height = '10vh';
+                        priceContainer.style.display = 'flex';
+                        priceContainer.style.flexDirection = 'column';
+                        priceContainer.style.alignItems = 'center';
 
                         const price = document.createElement('span');
                         price.className = 'me-2 d-flex align-items-center';
@@ -221,10 +275,13 @@
                         button.href = `/film/${film.id}`;
                         button.textContent = 'Xem thông tin';
 
-                        cardBody.appendChild(title);
-                        cardBody.appendChild(text);
-                        cardBody.appendChild(price);
-                        cardBody.appendChild(button);
+                        priceContainer.appendChild(price);
+                        priceContainer.appendChild(button);
+
+                        cardBody.appendChild(titleContainer);
+                        cardBody.appendChild(storyContainer);
+                        cardBody.appendChild(genreContainer);
+                        cardBody.appendChild(priceContainer);
 
                         card.appendChild(cardImage);
                         card.appendChild(cardBody);
