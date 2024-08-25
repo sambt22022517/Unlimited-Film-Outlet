@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-mdb-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Tìm kiếm</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <!-- Google Fonts Roboto -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+    />
+    <!-- MDB -->
+    <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/filter.css' %}" />
+
+  </head>
+  <body>
+    <!-- Start your project here-->
+    <!-- Navbar -->
+    {% include 'nav.html' with num_items_in_cart=num_items_in_cart user_logged_in=user_logged_in %}
+    <!-- Navbar -->
+
+    <!-- Category Filter -->
+    <div class="container">
+        <div class="row">
+            <aside class="col-md-3">
+                <form method="get" action="{% url 'search' %}">
+                    <div class="card filter">
+                        <header class="card-header">
+                            <h4 class="title">Thể loại</h4>
+                        </header>
+                        
+                        <div class="container">
+                            <ul class="ul-search">
+                                {% for genre in genres %}
+                                    {% if genre.on %}
+                                        <li>
+                                            <input type="checkbox" name="{{ genre.id }}" checked>{{ genre.genre }}
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <input type="checkbox" name="{{ genre.id }}">{{ genre.genre }}
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        
+                        <header class="card-header">
+                            <h4 class="title">Giá</h4>
+                        </header>
+                        <div class="card-body">
+                            <div class="form-group col-md-6">
+                                <label>Từ</label>
+                                <input class="form-control" placeholder="0đ" type="number" name="min" step="10000" value="{{ min_price }}">
+                            </div>
+                            <div class="form-group text-right col-md-6">
+                                <label>Đến</label>
+                                <input class="form-control" placeholder="1,000,000đ" type="number" name="max" step="10000" value="{{ max_price }}">
+                            </div>
+                        </div><!-- card-body.// -->
+                        <button class="btn btn-block btn-primary">Áp dụng</button>
+                    </div> <!-- card.// -->
+                </form>
+            </aside>
+            <main class="col-md-9">
+    <!-- Category Filter -->
+                {% if films %}
+                    <!-- List film -->
+                    {% include 'list_films.html' with films=films max_in_row=4 %}
+                    <!-- List film -->
+                {% else %}
+                    <div id="film-container" class="container" style="padding: 50px;">
+                        <div class="row" id="film-row">
+                            <h1 style="margin-top: 50px; margin-left: 50px;">Tiếc quá! Chúng tôi vẫn chưa có phim bạn yêu cầu (T_T)</h1>
+                        </div>
+                    </div>
+                {% endif %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    {% include 'footer.html' %} 
+    <!-- Footer -->
+
+    <!-- End your project here-->
+
+    <!-- MDB -->
+    <script type="text/javascript" src="{% static 'js/mdb.umd.min.js' %}"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+  </body>
+</html>

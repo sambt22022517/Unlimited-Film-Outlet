@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Đăng nhập</title>
+   <!--Made with love by Mutiullah Samim -->
+   
+	<!--Bootsrap 4 CDN-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+  <!--Fontawesome CDN-->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+  <!--Favicon-->
+  <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon" />
+
+  <!--Custom styles-->
+  <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+	
+</head>
+<body>
+  <div class="container">
+    <div class="d-flex justify-content-center h-100">
+      <div class="card">
+        <div class="card-header">
+          <h3>Đăng nhập</h3>
+        </div>
+        <div class="card-body">
+          <form id="login-form">
+            {% csrf_token %}
+            <div class="input-group form-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+              </div>
+              <input type="text" class="form-control" name="user_name" placeholder="username" id="user_name" >
+            </div>
+
+            <div class="input-group form-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-key"></i></span>
+              </div>
+              <input type="password" class="form-control" name="password" placeholder="password" id="password">
+            </div>
+
+            <div class="row align-items-center remember">
+              <input type="checkbox" id="show-password">Xem mật khẩu
+            </div>
+
+            <div class="form-group">
+              <input type="submit" value="Đăng nhập" class="btn float-right login_btn px-1">
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <div class="d-flex justify-content-center links">
+            Bạn chưa có tài khoản?<a href="/register">Đăng ký</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('show-password').addEventListener('click', function () {
+        var passwordField = document.getElementById('password');
+        if (this.checked) {
+            passwordField.type = 'text';
+        } else {
+            passwordField.type = 'password';
+        }
+    });
+
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Ngăn chặn form submit mặc định
+
+        // Lấy giá trị từ các trường input
+        const user_name = document.querySelector('input[name="user_name"]').value;
+        const password = document.querySelector('input[name="password"]').value;
+
+        // Mã hóa mật khẩu bằng MD5
+        const hashedPassword = CryptoJS.MD5(password).toString();
+
+        // Sử dụng fetch để gửi dữ liệu đến server
+        fetch('/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken') // Nếu bạn dùng Django
+            },
+            body: JSON.stringify({
+                'user_name': user_name,
+                'password': hashedPassword
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Xử lý kết quả trả về
+            if (data.success) {
+                window.location.href = '/home'; // Chuyển đến trang chủ
+            } else {
+                alert(data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    // Hàm lấy CSRF token nếu bạn sử dụng Django
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+  </script>
+</body>
+</html>

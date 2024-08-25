@@ -1,0 +1,326 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-mdb-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Đề xuất phim</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <!-- Google Fonts Roboto -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+    />
+    <!-- MDB -->
+    <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/filter.css' %}" />
+
+  </head>
+  <body>
+    <!-- Start your project here-->
+
+    <!-- Navbar -->
+    {% include 'nav.html' with num_items_in_cart=num_items_in_cart user_logged_in=user_logged_in %}
+    <!-- Navbar -->
+
+    <!-- Category Filter -->
+    <div class="container">
+        <div class="row">
+            <aside class="col-md-3">
+                <form method="get" action="{% url 'recommend' %}">
+                    <div class="card filter">
+                        <header class="card-header">
+                            <h4 class="title">Thể loại</h4>
+                        </header>
+                        
+                        <div class="container">
+                            <ul class="ul-search">
+                                {% for genre in genres %}
+                                    {% if genre.on %}
+                                        <li>
+                                            <input type="checkbox" class="genre-checkbox" name="{{ genre.id }}" checked>{{ genre.genre }}
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <input type="checkbox" class="genre-checkbox" name="{{ genre.id }}">{{ genre.genre }}
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        
+                        <header class="card-header">
+                            <h4 class="title">Giá</h4>
+                        </header>
+                        <div class="card-body">
+                            <div class="form-group col-md-6">
+                                <label>Từ</label>
+                                <input class="form-control" placeholder="0đ" type="number" name="min" step="10000" value="{{ min_price }}" id="minPriceInput">
+                            </div>
+                            <div class="form-group text-right col-md-6">
+                                <label>Đến</label>
+                                <input class="form-control" placeholder="1,000,000đ" type="number" name="max" step="10000" value="{{ max_price }}" id="maxPriceInput">
+                            </div>
+                        </div><!-- card-body.// -->
+                        <button class="btn btn-block btn-primary">Áp dụng</button>
+                    </div> <!-- card.// -->
+                </form>
+            </aside>
+            <!-- Category Filter -->
+
+            <main class="col-md-9">
+                <!-- Spinner -->
+                <div id="spinner" style=" width:100%; height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div class="spinner-border" role="status" style="margin: 50px; padding: 30px;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <!-- Spinner -->
+
+                <!-- List Film -->
+                <div id="film-container" class="container" style="padding: 50px;">
+                    <div class="row" id="film-row">
+                        <!-- Các phần tử film sẽ được thêm vào đây -->
+                    </div>
+                </div>
+                <!-- List Film -->
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    {% include 'footer.html' %} 
+    <!-- Footer -->
+
+    <!-- End your project here-->
+
+    <!-- MDB -->
+    <script type="text/javascript" src="{% static 'js/mdb.umd.min.js' %}"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Custom scripts -->
+    <script>
+        function showSpinner() {
+            document.getElementById("spinner").style.display = "flex"; // Hiển thị spinner
+        }
+
+        function hideSpinner() {
+            document.getElementById("spinner").style.display = "none"; // Ẩn spinner
+        }
+
+        function getCheckedGenres() {
+            // Lấy tất cả các checkbox có class 'genre-checkbox'
+            const checkboxes = document.querySelectorAll('.genre-checkbox');
+            
+            // Tạo một mảng để lưu thông tin các checkbox được chọn
+            const checkedGenres = [];
+
+            // Lặp qua tất cả các checkbox
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    // Lưu giá trị của checkbox vào mảng
+                    checkedGenres.push(checkbox.name);
+                }
+            });
+
+            return checkedGenres;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkedGenres = getCheckedGenres();
+            
+            const minPriceInput = document.getElementById('minPriceInput');
+            const minPrice = minPriceInput.value;
+            const minPriceNumber = parseFloat(minPrice);
+            
+            const maxPriceInput = document.getElementById('maxPriceInput');
+            const maxPrice = maxPriceInput.value;
+            const maxPriceNumber = parseFloat(maxPrice);
+
+            fetch('/recommend/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    'genres': checkedGenres,
+                    'min': minPrice,
+                    'max': maxPrice,
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const films = data.films;
+                const container = document.getElementById('film-row');
+                let row = document.createElement('div');
+                row.className = 'row';
+                container.appendChild(row);
+                    
+                if (films.length > 0) {
+                    films.forEach((film, index) => {
+                        if (index % 4 === 0 && index !== 0) {
+                            // Nếu cần tạo một hàng mới
+                            row = document.createElement('div');
+                            row.className = 'row';
+                            container.appendChild(row);
+                        }
+
+                        const col = document.createElement('div');
+                        col.className = 'col-md';
+
+                        const card = document.createElement('div');
+                        card.className = 'card mb-5';
+                        card.style.height = '500px';
+                        card.style.width = '192px';
+
+                        const cardImage = document.createElement('div');
+                        cardImage.className = 'bg-image hover-overlay';
+                        cardImage.setAttribute('data-mdb-ripple-init', '');
+                        cardImage.setAttribute('data-mdb-ripple-color', 'light');
+                        cardImage.style.height = '30vh';
+                        cardImage.style.display = 'flex';
+                        cardImage.style.flexDirection = 'column';
+                        cardImage.style.alignItems = 'center';
+
+                        const img = document.createElement('img');
+                        img.className = 'img-fluid';
+                        img.style.height = '100vh';
+                        img.style.width = 'auto';
+                        img.style.objectFit = 'cover';
+                        img.src = film.imageUrl;
+
+                        const link = document.createElement('a');
+                        link.href = `/film/${film.id}`;
+
+                        const mask = document.createElement('div');
+                        mask.className = 'mask';
+                        mask.style.backgroundColor = 'rgba(251, 251, 251, 0.15)';
+
+                        link.appendChild(mask);
+                        cardImage.appendChild(img);
+                        cardImage.appendChild(link);
+
+                        const cardBody = document.createElement('div');
+                        cardBody.className = 'card-body';
+
+                        const titleContainer = document.createElement('div');
+                        titleContainer.style.height = '8vh';
+                        titleContainer.style.overflow = 'hidden';
+
+                        const title = document.createElement('h5');
+                        title.className = 'card-title filmTitle';
+                        title.style.overflow = 'hidden';
+                        title.style.textOverflow = 'ellipsis';
+                        title.style.display = '-webkit-box';
+                        title.style.webkitLineClamp = '2';
+                        title.style.webkitBoxOrient = 'vertical';
+                        title.textContent = film.film_name;
+
+                        const titleLink = document.createElement('a');
+                        titleLink.href = `/film/${film.id}`;
+                        titleLink.appendChild(title);
+
+                        titleContainer.appendChild(titleLink);
+
+                        const storyContainer = document.createElement('div');
+                        storyContainer.style.height = '16vh';
+
+                        const story = document.createElement('p');
+                        story.className = 'card-text filmStory';
+                        story.style.overflow = 'hidden';
+                        story.style.textOverflow = 'ellipsis';
+                        story.style.display = '-webkit-box';
+                        story.style.webkitLineClamp = '4';
+                        story.style.webkitBoxOrient = 'vertical';
+                        story.textContent = film.story;
+
+                        storyContainer.appendChild(story);
+
+                        const genreContainer = document.createElement('div');
+                        genreContainer.style.height = '4vh';
+
+                        const genre = document.createElement('p');
+                        genre.className = 'card-text text-muted small filmGenre';
+                        genre.style.overflow = 'hidden';
+                        genre.style.textOverflow = 'ellipsis';
+                        genre.style.display = '-webkit-box';
+                        genre.style.webkitLineClamp = '1';
+                        genre.style.webkitBoxOrient = 'vertical';
+                        genre.textContent = film.genre;
+
+                        genreContainer.appendChild(genre);
+
+                        const priceContainer = document.createElement('div');
+                        priceContainer.style.height = '10vh';
+                        priceContainer.style.display = 'flex';
+                        priceContainer.style.flexDirection = 'column';
+                        priceContainer.style.alignItems = 'center';
+
+                        const price = document.createElement('span');
+                        price.className = 'me-2 d-flex align-items-center';
+                        price.style.fontSize = 'large';
+                        price.textContent = `${parseFloat(film.price).toFixed(0)}đ`;
+
+                        const button = document.createElement('a');
+                        button.className = 'btn btn-primary';
+                        button.href = `/film/${film.id}`;
+                        button.textContent = 'Xem thông tin';
+
+                        priceContainer.appendChild(price);
+                        priceContainer.appendChild(button);
+
+                        cardBody.appendChild(titleContainer);
+                        cardBody.appendChild(storyContainer);
+                        cardBody.appendChild(genreContainer);
+                        cardBody.appendChild(priceContainer);
+
+                        card.appendChild(cardImage);
+                        card.appendChild(cardBody);
+
+                        col.appendChild(card);
+
+                        row.appendChild(col);
+                    });
+                } else {
+                    const emptyMessage = document.createElement('h1');
+                    emptyMessage.textContent = 'Tiếc quá! Chúng tôi vẫn chưa có phim bạn yêu cầu (T_T)';
+                    emptyMessage.style.marginTop = '50px';
+                    emptyMessage.style.marginLeft = '50px';
+                    container.appendChild(emptyMessage);
+                }
+                hideSpinner();
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        // Gọi hàm showSpinner() khi bắt đầu tải
+        showSpinner();
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Xác định cookie có tên là name
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+    </script>
+  </body>
+</html>

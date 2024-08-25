@@ -1,0 +1,45 @@
+{% load static %}
+<div class="container"  style="padding: 50px;">
+    <div class="row">
+        {% for film in films %}
+            <div class="col-md">
+                <!-- Card -->
+                <div class="card mb-5" style="height: 500px; width: 192px;">
+                    <div class="bg-image hover-overlay" data-mdb-ripple-init data-mdb-ripple-color="light" style="height: 30vh; display: flex; flex-direction: column; align-items: center; ">
+                        <img src="{{ film.imageUrl }}" class="img-fluid" style="height: 100vh; width: auto; object-fit: cover;"/>
+                        <a href="/film/{{ film.id }}">
+                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div style="height: 8vh; overflow: hidden;">
+                            <a href="/film/{{ film.id }}"><h5 class="card-title filmTitle" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                                {{ film.film_name}}
+                            </h5></a>
+                        </div>
+                        <div style="height: 16vh;">
+                            <p class="card-text filmStory" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">
+                                {{ film.story }}
+                            </p>
+                        </div>
+                        <div style="height: 4vh;">
+                            <p class="card-text text-muted small filmGenre" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;">
+                                {{ film.genre }}
+                            </p>
+                        </div>
+                        <div style="height: 10vh; display: flex; flex-direction: column; align-items: center;">
+                            <span class="me-2 d-flex align-items-center" style="font-size: large;">{{ film.price|floatformat:0 }}đ</span>
+                            <a href="/film/{{ film.id }}" class="btn btn-primary">Xem thông tin</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card -->
+            </div>
+            <!-- Column -->
+
+            {% if forloop.counter|divisibleby:max_in_row and not forloop.last %}
+              </div><div class="row">
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

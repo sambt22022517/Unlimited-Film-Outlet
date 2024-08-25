@@ -1,39 +1,16 @@
 version: '3'
 services:
-  db:
-    image: mariadb
-    container_name: database
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DATABASE_NAME}
-      MYSQL_USER: ${DATABASE_USER}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-    env_file:
-      - .env
-    healthcheck:
-      interval: 5s
-      retries: 5
-      test:
-        [
-          "CMD",
-          "healthcheck.sh",
-          "--su-mysql",
-          "--connect",
-          "--innodb_initialized"
-        ]
-      timeout: 30s
-
-  web:
+  backend:
     build: .
-    container_name: UFO
-    command: python manage.py runserver 0.0.0.0:8000
+    container_name: UFO_backend
+    command: >
+      sh -c "
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000
+      "
     volumes:
       - .:/app
     ports:
       - 8000:8000
-    depends_on:
-      db:
-        condition: service_healthy
     env_file:
       - .env

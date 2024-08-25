@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-mdb-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>UFO - Unlimited Film Outlet Website</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <!-- Google Fonts Roboto -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+    />
+    <!-- MDB -->
+    <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+  </head>
+  <body>
+    <!-- Start your project here-->
+    <!-- Navbar -->
+    {% include 'nav.html' with num_items_in_cart=num_items_in_cart user_logged_in=user_logged_in %}
+    <!-- Navbar -->
+
+  <!-- Carousel wrapper -->
+  <div id="carouselBasicExample" class="carousel slide carousel-fade" data-mdb-ride="carousel" data-mdb-carousel-init>
+      <!-- Indicators -->
+      <div class="carousel-indicators">
+        <button
+          type="button"
+          data-mdb-target="#carouselBasicExample"
+          data-mdb-slide-to="0"
+          class="active"
+          aria-current="true"
+          aria-label="Slide 1"
+        ></button>
+        <button
+          type="button"
+          data-mdb-target="#carouselBasicExample"
+          data-mdb-slide-to="1"
+          aria-label="Slide 2"
+        ></button>
+        <button
+          type="button"
+          data-mdb-target="#carouselBasicExample"
+          data-mdb-slide-to="2"
+          aria-label="Slide 3"
+        ></button>
+      </div>
+
+      <!-- Inner -->
+      <div class="carousel-inner">
+        <!-- Single item -->
+        <div class="carousel-item active">
+          <a href="/film/tt277561831234">
+            <img src="{% static 'img/iron man 3.jpg' %}" class="d-block w-100" alt="Người sắt 3" style="height: 573px; width: 100%; object-fit: contain;"/>
+          </a>
+          <div class="carousel-caption d-none d-md-block">
+            <a href="/film/tt277561831234">
+              <h3 style="color: white;">Người sắt 3</h3>
+            </a>
+            <p style="color: white;">Câu chuyện bắt đầu bằng một ký ức của Tony Stark xảy ra vào đêm giao thừa năm 1999...</p>
+          </div>
+        </div>
+
+        <!-- Single item -->
+        <div class="carousel-item">
+          <a href="/film/tt277561831235">
+            <img src="{% static 'img/ke cap mat trang 4.jpg' %}" class="d-block w-100" alt="Kẻ cắp mặt trăng 4" style="height: 573px; width: 100%; object-fit: contain;"/>
+          </a>
+          <div class="carousel-caption d-none d-md-block">
+            <a href="/film/tt277561831235">
+              <h3 style="color: white;">Kẻ cắp mặt trăng 4</h3>
+            </a>
+            <p style="color: white;">Kẻ trộm Mặt Trăng 4 là bộ phim hoạt hình thuộc thể loại hài được sản xuất bởi Illumination...</p>
+          </div>
+        </div>
+
+        <!-- Single item -->
+        <div class="carousel-item">
+          <a href="/film/tt277561831236">
+            <img src="{% static 'img/conan movie 27.jpg' %}" class="d-block w-100" alt="Conan The Movie: NGÔI SAO 5 CÁNH 1 TRIỆU ĐÔ" style="height: 573px; width: 100%; object-fit: contain;"/>
+          </a>
+            <div class="carousel-caption d-none d-md-block">
+              <a href="/film/tt277561831236">
+                <h3 style="color: white;">Thám tử lừng danh Conan: Ngôi sao 5 cánh 1 triệu đô</h3>
+              </a>
+                <p style="color: white;">Thám tử lừng danh Conan: Ngôi sao 5 cánh 1 triệu đô là bộ phim điện ảnh anime trinh thám năm 2024...</p>
+          </div>
+        </div>
+      </div>
+      <!-- Inner -->
+
+      <!-- Controls -->
+      <button class="carousel-control-prev" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    <!-- Carousel wrapper -->
+
+    <!-- List film -->
+    {% include 'list_films.html' with films=films max_in_row=5 %}
+    <!-- List film -->
+
+    <!-- Footer -->
+    {% include 'footer.html' %} 
+    <!-- Footer -->
+
+    <!-- End your project here-->
+
+    <!-- MDB -->
+    <script type="text/javascript" src="{% static 'js/mdb.umd.min.js' %}"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+  </body>
+</html>
