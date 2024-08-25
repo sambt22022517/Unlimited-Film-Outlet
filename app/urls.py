@@ -1,7 +1,8 @@
-from django.urls import path
+from django.urls import path, re_path
 from django.conf.urls.static import static
 from django.conf import settings
 from .views import home, user, index, filter, film, cart, bill
+from django.views.static import serve
 
 urlpatterns = [
     path('', home.home, name='home'),
@@ -30,3 +31,4 @@ urlpatterns = [
     path('all-bill/', bill.render_all_bill, name='render_all_bill'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += [re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT, }), ]
