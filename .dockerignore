@@ -2,3 +2,6 @@
 .DS_Store
 .env
 covers/
+film_vietnamese.csv
+.vscode/
+**__pycache__/
