@@ -29,27 +29,37 @@ def render_bill_for_payment(request, type):
     if request.method == 'POST':
         if type == 'create':
             data = json.loads(request.body)
-            total_price = data.get('total_price')
+            # total_price = data.get('total_price')
 
             carts = Cart.objects.filter(user=user, selected=True)
-            bill = Bill(user=user, payment_date=datetime.now(), total_price=total_price)
+            bill = Bill(user=user, payment_date=datetime.now(), total_price=0)
             bill.save()
+            total_price = 0
             for cart in carts:
                 item = BillItem(bill=bill, film=cart.film)
                 item.save()
                 cart.delete()
+                total_price += cart.film.price
+            
+            bill.total_price = total_price
+            bill.save()
             return JsonResponse({'success': True, 'type': bill.id,}, status=200)
         elif type == 'buynow':
             data = json.loads(request.body)
-            total_price = data.get('total_price')
+            # total_price = data.get('total_price')
             film_id = data.get('film_id')
             
-            bill = Bill(user=user, payment_date=datetime.now(), total_price=total_price)
+            bill = Bill(user=user, payment_date=datetime.now(), total_price=0)
             bill.save()
             
             film = Film.objects.get(id=film_id)
             item = BillItem(bill=bill, film=film)
             item.save()
+
+            total_price = film.price
+            bill.total_price = total_price
+            bill.save()
+
             return JsonResponse({'success': True, 'type': bill.id,}, status=200)
 
     bill = Bill.objects.get(id=int(type))
