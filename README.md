@@ -1,4 +1,3 @@
-# Bản hướng dẫn cho anh em trong nhóm
 ### Hướng dẫn chạy project
 1. Mở `cmd`
 2. Chạy
